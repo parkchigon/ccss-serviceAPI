@@ -1,0 +1,13 @@
+[XPay 인증서 설치] // 연동대상이 발급한 인증서를 java의 인증서 저장소에 신뢰인증서로 추가함.
+1. 로컬 PC
+keytool -importcert -keystore "D:/devtool/Java/jdk1.8.0_181/jre1.8.0_181/lib/security/cacerts" -storepass changeit -trustcacerts -alias COMODO_RSA_Certification_Authoryity -file "COMODO_RSA_Certification_Authoryity.cer"
+keytool -importcert -keystore "D:/devtool/Java/jdk1.8.0_181/jre1.8.0_181/lib/security/cacerts" -storepass changeit -trustcacerts -alias COMODO_RSA_Domain_ValidationSecureServer_CA -file "COMODO_RSA_Domain_Validation_Secure_Server_CA.cer"	
+
+2. Cloud 서버
+: 키저장소 (/etc/pki/java/cacerts)
+keytool -importcert -keystore "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-1.b14.el6.x86_64/jre/lib/security/cacerts" -storepass changeit -trustcacerts -alias COMODO_RSA_Certification_Authoryity -file "./COMODO_RSA_Certification_Authoryity.cer"
+keytool -importcert -keystore "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.91-1.b14.el6.x86_64/jre/lib/security/cacerts" -storepass changeit -trustcacerts -alias COMODO_RSA_Domain_ValidationSecureServer_CA -file "./COMODO_RSA_Domain_Validation_Secure_Server_CA.cer"
+
+
+keytool -importcert -keystore "/etc/pki/java/cacerts" -storepass changeit -trustcacerts -alias COMODO_RSA_Certification_Authoryity -file "./COMODO_RSA_Certification_Authoryity.cer"
+keytool -importcert -keystore "/etc/pki/java/cacerts" -storepass changeit -trustcacerts -alias COMODO_RSA_Domain_ValidationSecureServer_CA -file "./COMODO_RSA_Domain_Validation_Secure_Server_CA.cer"

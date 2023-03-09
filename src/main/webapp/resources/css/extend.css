@@ -1,0 +1,90 @@
+@charset "utf-8";
+
+html, body {height:100%;}
+
+.dim {width:100%;}
+ 
+/* layout */
+.page {width:100%; height:100%;} 
+
+/* content scroll */
+.page-scroll section {height:100%;} 
+
+/* 드랍다운리스트 */
+.dropdown-container {right:0;}
+.dropdown-content {width:100% !important;}
+
+/* 서비스가입 */
+.full-popup {width:100%;}
+.full-popup .content {height:100%;}
+.full-popup .content .inner-cont {height:100%;padding-top:24px;padding-bottom:124px;}
+.full-popup .content .inbox-scroll {width:100% !important; height:100%; overflow:auto !important; /* 20190124 - overflow */}
+
+/* 가입정보-공통 */
+.fare-info {display:flex; padding-top:50px;}
+.fare-info .product {width:369px;}
+.fare-info .product .name {font-family:'NotoSans-Bold'; font-size:42px;}
+.fare-info .product .small {font-family:'NotoSans'; font-size:21px;}
+.fare-info .product .big {line-height:52px; letter-spacing:-1.9px}
+.fare-info .product .period {margin-top:32px;}
+.fare-info .product .period li {display:flex; align-items:center; margin-bottom:2px; font-size:24px;}
+.fare-info .product .period span {width:144px; opacity:0.5; margin-top:4px;}
+.fare-info .product .period em {font-family:'Roboto';}
+.fare-info .data {position:relative; width:300px; padding-top:37px;}
+.fare-info .data .graph {width:300px; height:300px; /* background:url('../images/graph.png') no-repeat 0 0; */}
+.fare-info .data .rate {position:absolute; top:37px; left:0; width:300px; height:300px; padding:60px 0;}
+.fare-info .data .rate li {display:block; padding:8px 0 10px; text-align:center;}
+.fare-info .data .rate li:nth-child(1) {color:#fd6d6d;}
+.fare-info .data .rate li:nth-child(2) {color:#a8a6a7;}
+.fare-info .data .rate li:last-child:before {content:''; display:block; width:100px; height:1px; margin:0 auto 17px; background:#fff; opacity:0.1;}
+.fare-info .data .rate li .tt {display:block; font-family:'NotoSans'; font-size:19px;}
+.fare-info .data .rate li .mb {font-family:'Roboto'; font-size:33px; line-height:36px; letter-spacing:-1.5px;}
+.fare-info .data .rate li .mb strong {font-family:'Roboto-Bold';}
+
+/* 요금제변경 */
+.coupon-rate .fare-change .article .t-grid {width:100%;}
+.coupon-rate .fare-change {height:100%;} 
+.coupon-rate .fare-change .inbox-scroll {width:100% !important; height:100%;} 
+.coupon-rate .fare-change .title {width:100%;}
+.coupon-rate .fare-change .certification {width:100%; display:block;}
+.coupon-rate .fare-change .certification:after {clear:both; display:block; content:' ';}
+.coupon-rate .fare-change .certification li {width:48.5%; float:left;}
+.coupon-rate .fare-change .certification li:nth-child(2) {float:right;}
+.coupon-rate .fare-change .certification li .btn-line {width:70.28%;}
+.coupon-rate .fare-change .d-grid td.bank .select-box {width:100%;}
+.coupon-rate .fare-change .d-grid td.acc-n input {width:100%;}
+.coupon-rate .fare-change .d-grid td.name .select-box {float:left;}
+.coupon-rate .fare-change .d-grid td.name input {display:block; width:calc(100% - 200px);}
+.coupon-rate .fare-change .d-grid td.id-card input {float:left; width:calc(50% - 13px);}
+.coupon-rate .fare-change .d-grid td.inq-n .select-box {width: calc(100% - 50% - 10px);}
+.coupon-rate .fare-change .d-grid .fm-container .private.sel {display:table;}
+.coupon-rate .fare-change .bt .btn-line {display:inline-block; width:34%;}
+
+/* 정액요금제 */
+.flat-rate .bill-inquire {height:100%;} 
+.flat-rate .bill-inquire .scroll-container {height:100%;margin-top:-100px;padding:100px 16px 0 55px;} 
+.flat-rate .bill-inquire .scroll-container .inbox-scroll {display:none; overflow:auto; width:100% !important; height:100%; padding-right:37px !important; padding-top:30px; padding-bottom:30px;} 
+.flat-rate .bill-inquire .modify-fm .d-grid .fm-container .private.sel {display:table; width:100%;} 
+.flat-rate .bill-inquire .modify-fm .d-grid td.bank .select-box,
+.flat-rate .bill-inquire .modify-fm .d-grid td.acc-n input {width:100%;}
+.flat-rate .bill-inquire .modify-fm .d-grid td.name input {width: calc(100% - 208px);}
+.flat-rate .bill-inquire .modify-fm .d-grid td.id-card input {float: left; width: calc(50% - 13px);}
+.flat-rate .bill-inquire .modify-fm .d-grid td.inq-n .select-box {width: calc(100% - 50% - 9px);}
+.flat-rate .bill-inquire .modify-fm .bt .btn-line {width:34%;}
+
+.flat-rate .service-change .scroll-container .inbox-scroll {width:100% !important;} 
+
+ /* 20190124 */
+.full-popup .footer {position:fixed; overflow:initial; right:0; z-index:1;}
+
+ /* 20190125 */
+.page-scroll .notice-wrap {padding:25px 16px 26px 55px;}
+.page-scroll .notice-wrap .notice-cont {height:100%;}
+.page-scroll .notice-wrap .inbox-scroll {overflow:auto;    padding-right: 38px !important; width: 100% !important; height: 100%;}
+
+/* 20190129 - 약관동의 확장 */
+.terms-condt .inbox-scroll {width:100% !important; height:100%;}
+.terms-condt .title {width:auto;}
+
+/* 20190131 */
+.flat-rate .service-change .scroll-container .inbox-scroll {height:100%;}

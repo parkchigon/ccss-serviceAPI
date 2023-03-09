@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="DataGift">
+
+	<resultMap id="DataGiftVO" type="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		<result property="lgdOid"	column="LGD_OID" />
+		<result property="lgdMid"	column="LGD_MID" />
+		<result property="lgdTid"	column="LGD_TID" />
+		<result property="lgdPayDate"	column="LGD_PAYDATE" />
+		<result property="issueNo"	column="ISSUE_NO" />
+		<result property="giftName"	column="GIFT_NAME" />
+		<result property="dataSize"	column="DATA_SIZE" />
+		<result property="giftKub"	column="GIFT_KUB" />
+		<result property="issueRegKup"	column="ISSUE_REG_KUP" />
+		<result property="sellAmount"	column="SELL_AMOUNT" />
+		<result property="issueName"	column="ISSUE_NAME" />
+		<result property="campStartDt"	column="CAMP_START_DT" />
+		<result property="campEndDt"	column="CAMP_END_DT" />
+		<result property="ctn"	column="CTN" />
+		<result property="giftNo"	column="GIFT_NO" />
+		<result property="giftRegDt"	column="GIFT_REG_DT" />
+		<result property="mgrAppId"	column="MGRAPP_ID" />
+		<result property="mgrAppCtn"	column="MGRAPP_CTN" />
+		<result property="memberId"	column="MEMB_ID" />
+		<result property="carNum"	column="CAR_NUM" />
+		<result property="useYn"	column="USE_YN" />
+		<result property="regDt"	column="REG_DT" />
+		<result property="regId"	column="REG_ID" />
+		<result property="updDt"	column="UPD_DT" />
+		<result property="updId"	column="UPD_ID" />
+	</resultMap>
+	
+	<insert id="insertDataGift" parameterType="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		INSERT INTO TB_GIFT(
+			LGD_OID,
+			LGD_MID,
+			LGD_TID,
+			LGD_PAYDATE,
+			ISSUE_NO,
+			GIFT_NAME,
+			DATA_SIZE,
+			GIFT_KUB,
+			ISSUE_REG_KUP,
+			SELL_AMOUNT,
+			ISSUE_NAME,
+			CAMP_START_DT,
+			CAMP_END_DT,
+			CTN,
+			GIFT_NO,
+			GIFT_REG_DT,
+			MGRAPP_ID,
+			MGRAPP_CTN,
+			MEMB_ID,
+			CAR_NUM,
+			USE_YN,
+			REG_DT,
+			REG_ID,
+			UPD_DT,
+			UPD_ID
+		) VALUES (
+			#{lgdOid, jdbcType=VARCHAR},
+			#{lgdMid, jdbcType=VARCHAR},
+			#{lgdTid, jdbcType=VARCHAR},
+			#{lgdPayDate, jdbcType=VARCHAR},
+			#{issueNo, jdbcType=VARCHAR},
+			#{giftName, jdbcType=VARCHAR},
+			#{dataSize, jdbcType=VARCHAR},
+			#{giftKub, jdbcType=VARCHAR},
+			#{issueRegKup, jdbcType=VARCHAR},
+			#{sellAmount, jdbcType=VARCHAR},
+			#{issueName, jdbcType=VARCHAR},
+			#{campStartDt, jdbcType=VARCHAR},
+			#{campEndDt, jdbcType=VARCHAR},
+			#{ctn, jdbcType=VARCHAR},
+			#{giftNo, jdbcType=VARCHAR},
+			#{giftRegDt, jdbcType=VARCHAR},
+			#{mgrAppId, jdbcType=VARCHAR},
+			#{mgrAppCtn, jdbcType=VARCHAR},
+			#{memberId, jdbcType=VARCHAR},
+			#{carNum, jdbcType=VARCHAR},
+			#{useYn, jdbcType=VARCHAR},
+			SYSDATE,
+			#{regId, jdbcType=VARCHAR},
+			SYSDATE,
+			#{updId, jdbcType=VARCHAR}
+		)
+	</insert>	
+	
+	<select id="selectDataGiftByOid" resultMap="DataGiftVO" parameterType="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		SELECT
+			LGD_OID,
+			LGD_MID,
+			LGD_TID,
+			LGD_PAYDATE,
+			ISSUE_NO,
+			GIFT_NAME,
+			DATA_SIZE,
+			GIFT_KUB,
+			ISSUE_REG_KUP,
+			SELL_AMOUNT,
+			ISSUE_NAME,
+			CAMP_START_DT,
+			CAMP_END_DT,
+			CTN,
+			GIFT_NO,
+			GIFT_REG_DT,
+			MGRAPP_ID,
+			MGRAPP_CTN,
+			MEMB_ID,
+			CAR_NUM,
+			USE_YN,
+			REG_DT,
+			REG_ID,
+			UPD_DT,
+			UPD_ID
+		FROM 
+			TB_GIFT
+		WHERE
+			LGD_OID = #{lgdOid}
+	</select>	
+
+	<select id="selectDataGiftByGiftNo" resultMap="DataGiftVO" parameterType="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		SELECT
+			LGD_OID,
+			LGD_MID,
+			LGD_TID,
+			LGD_PAYDATE,
+			ISSUE_NO,
+			GIFT_NAME,
+			DATA_SIZE,
+			GIFT_KUB,
+			ISSUE_REG_KUP,
+			SELL_AMOUNT,
+			ISSUE_NAME,
+			CAMP_START_DT,
+			CAMP_END_DT,
+			CTN,
+			GIFT_NO,
+			GIFT_REG_DT,
+			MGRAPP_ID,
+			MGRAPP_CTN,
+			MEMB_ID,
+			CAR_NUM,			
+			USE_YN,
+			REG_DT,
+			REG_ID,
+			UPD_DT,
+			UPD_ID
+		FROM 
+			TB_GIFT
+		WHERE 
+			GIFT_NO = #{giftNo}
+		AND 
+			ISSUE_REG_KUP NOT IN ('E', 'C', 'M')
+	</select>
+	
+	<select id="selectSellAmountByGiftNo" resultType="string" parameterType="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		SELECT
+			SELL_AMOUNT
+		FROM 
+			TB_GIFT
+		WHERE
+			GIFT_NO = #{giftNo}
+	</select>
+
+	<select id="selectUnRegDataGift" resultMap="DataGiftVO" parameterType="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		SELECT
+			LGD_OID,
+			LGD_MID,
+			LGD_TID,
+			LGD_PAYDATE,
+			ISSUE_NO,
+			GIFT_NAME,
+			DATA_SIZE,
+			GIFT_KUB,
+			ISSUE_REG_KUP,
+			SELL_AMOUNT,
+			ISSUE_NAME,
+			CAMP_START_DT,
+			CAMP_END_DT,
+			CTN,
+			GIFT_NO,
+			GIFT_REG_DT,
+			MGRAPP_ID,
+			MGRAPP_CTN,
+			MEMB_ID,
+			CAR_NUM,		
+			USE_YN,
+			REG_DT,
+			REG_ID,
+			UPD_DT,
+			UPD_ID
+		FROM 
+			TB_GIFT
+		WHERE 
+			ISSUE_REG_KUP IN ('E', 'C', 'M')
+			AND MEMB_ID = #{memberId}
+	</select>
+
+		
+	<update id="updateDataGift" parameterType="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		UPDATE
+			TB_GIFT
+		SET
+			ISSUE_REG_KUP = #{issueRegKup},
+			<if test="!@org.springframework.util.StringUtils@isEmpty(giftNo) ">
+			GIFT_NO = #{giftNo},
+			</if>
+			GIFT_REG_DT = SYSDATE,
+			UPD_DT = SYSDATE
+		WHERE
+			LGD_OID = #{lgdOid}
+	</update>	
+
+	<delete id="deleteDataGiftByOid"  parameterType="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		DELETE
+			TB_GIFT 
+		WHERE 
+			LGD_OID = #{lgdOid}	
+	</delete>
+
+	<delete id="deleteDataGiftByTid"  parameterType="com.lgu.ccss.common.model.datagift.DataGiftVO">
+		DELETE
+			TB_GIFT 
+		WHERE 
+			LGD_OID = #{lgdTid}	
+	</delete>
+
+</mapper>

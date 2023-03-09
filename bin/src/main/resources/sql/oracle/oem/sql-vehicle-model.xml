@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="VehicleModel">
+	<resultMap id="vehicleModel" type="com.lgu.ccss.common.model.VehicleModelVO">
+		<result property="vehicleModelId" 	column="VEHICLE_MODEL_ID" />
+		<result property="oemId"			column="OEM_ID" />
+		<result property="vehicleModelNm"	column="VEHICLE_MODEL_NM" />
+		<result property="vehicleModelDesc"	column="VEHICLE_MODEL_DESC" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+	
+	<select id="selectVehicleModel" resultMap="vehicleModel" parameterType="com.lgu.ccss.common.model.VehicleModelVO">
+		SELECT 
+			VEHICLE_MODEL_ID,
+			OEM_ID,
+			VEHICLE_MODEL_NM,
+			VEHICLE_MODEL_DESC,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM 
+			TB_VEHICLE_MODEL
+		WHERE
+			VEHICLE_MODEL_ID = #{vehicleModelId}
+	</select>
+	
+	<select id="selectVehicleModelByName" resultMap="vehicleModel" parameterType="com.lgu.ccss.common.model.VehicleModelVO">
+		SELECT 
+			VEHICLE_MODEL_ID,
+			OEM_ID,
+			VEHICLE_MODEL_NM,
+			VEHICLE_MODEL_DESC,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM 
+			TB_VEHICLE_MODEL
+		WHERE
+			VEHICLE_MODEL_NM = #{vehicleModelNm}
+	</select>
+</mapper>

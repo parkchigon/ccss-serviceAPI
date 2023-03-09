@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="MgrAppUser">
+
+	 <resultMap id="mgrAppUserInfo" type="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		<result property="mgrappId"				column="MGRAPP_ID" />
+		<result property="mgrappLoginId"			column="MGRAPP_LOGIN_ID" />
+		<result property="mgrappLoginDt"		column="MGRAPP_LOGIN_DT" />
+		<result property="deviceType"			column="DEVICE_TYPE" />
+		<result property="pushId"				column="PUSH_ID" />
+		<result property="lastCertDt"			column="LAST_CERT_DT" />
+		<result property="mgrConStatus"			column="MGR_CON_STATUS" />
+		<result property="mgrappStatus"			column="MGRAPP_STATUS" />
+		<result property="regDt"				column="REG_DT" />
+		<result property="updDt"				column="UPD_DT" />
+		<result property="membId"				column="MEMB_ID" />
+		<result property="mgrappVer"			column="MGRAPP_VER" />
+		<result property="verType"				column="VER_TYPE" />
+		<result property="regId"				column="REG_ID" />
+		<result property="updId"				column="UPD_ID" />
+		<result property="jsonSetInfo"			column="JSON_SET_INFO" />
+	<!-- 	<result property="deviceNm"				column="DEVICE_NM" /> -->
+	<!-- 	<result property="mainUseYn"			column="MAIN_USE_YN" /> -->
+		<result property="loginFailCnt"			column="LOGIN_FAIL_CNT" />
+		<result property="lastLoginFailDt"		column="LAST_LOGIN_FAIL_DT" />
+		<result property="uuid"					column="UUID" />
+		<result property="latestLoginDt"		column="LATEST_LOGIN_DT" />
+		<result property="randomKey"			column="RANDOM_KEY" />
+		<result property="userNm"				column="USER_NM" />
+		<result property="osType"				column="OS_TYPE" />
+		<result property="pushKeyRegYn"			column="PUSH_KEY_REG_YN" />
+		<result property="appVer"				column="APP_VER" />
+		<result property="loginType"				column="LOGIN_TYPE" />
+	</resultMap>
+	
+	
+	<sql id="dynamicWhereTbMgrAppUser">
+		<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappLoginId) ">
+			AND MGRAPP_LOGIN_ID = #{mgrappLoginId}	
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(uuid) ">
+			AND UUID = #{uuid}	
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId) ">
+			AND MGRAPP_ID = #{mgrappId}	
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(deviceType) ">
+			AND DEVICE_TYPE = #{deviceType}	
+		</if>
+		
+		<if test="membIdArr !=null">
+			AND MEMB_ID IN 	
+			<foreach collection="membIdArr" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</sql>
+		
+	
+	
+	<select id="selectMgrUserInfo" resultMap="mgrAppUserInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		SELECT 
+			MGRAPP_ID,
+			MGRAPP_LOGIN_ID,
+			TO_CHAR(MGRAPP_LOGIN_DT,'yyyymmddhh24miss') as MGRAPP_LOGIN_DT,
+			DEVICE_TYPE,
+			PUSH_ID,
+			TO_CHAR(LAST_CERT_DT,'yyyymmddhh24miss') as LAST_CERT_DT,
+			MGR_CON_STATUS,
+			MGRAPP_STATUS,
+			TO_CHAR(REG_DT,'yyyymmddhh24miss') as REG_DT,
+			TO_CHAR(UPD_DT,'yyyymmddhh24miss') as UPD_DT,
+			MGRAPP_VER,
+			VER_TYPE,
+			REG_ID,
+			UPD_ID,
+			JSON_SET_INFO,
+			LOGIN_FAIL_CNT,
+			TO_CHAR(LAST_LOGIN_FAIL_DT,'yyyymmddhh24miss') as LAST_LOGIN_FAIL_DT,
+			UUID,
+			USER_NM,
+			PUSH_KEY_REG_YN,
+			OS_TYPE,
+			LOGIN_TYPE
+		FROM TB_MGRAPP_USER
+		WHERE 1=1
+		<include refid="dynamicWhereTbMgrAppUser"/> 
+	</select>
+	
+	<select id="selectMgrUserInfoList" resultMap="mgrAppUserInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO"> 
+		SELECT 
+				TU.MGRAPP_ID,
+				TU.MGRAPP_LOGIN_ID,
+				TO_CHAR(TU.MGRAPP_LOGIN_DT,'yyyymmddhh24miss') as MGRAPP_LOGIN_DT,
+				TU.DEVICE_TYPE,
+				TU.PUSH_ID,
+				TO_CHAR(TU.LAST_CERT_DT,'yyyymmddhh24miss') as LAST_CERT_DT,
+				TU.MGR_CON_STATUS,
+				TU.MGRAPP_STATUS,
+				TO_CHAR(TU.REG_DT,'yyyymmddhh24miss') as REG_DT,
+				TO_CHAR(TU.UPD_DT,'yyyymmddhh24miss') as UPD_DT,
+				TU.MGRAPP_VER,
+				TU.VER_TYPE,
+				TU.REG_ID,
+				TU.UPD_ID,
+				TU.JSON_SET_INFO,
+				TU.LOGIN_FAIL_CNT,
+				TO_CHAR(TU.LAST_LOGIN_FAIL_DT,'yyyymmddhh24miss') as LAST_LOGIN_FAIL_DT,
+				TU.UUID,
+				TU.USER_NM,
+				TU.OS_TYPE,
+				TU.LOGIN_TYPE
+			FROM TB_MGRAPP_USER TU, TB_MGRAPP_DEVICE TD
+			WHERE 1=1
+			AND TD.MEMB_ID=#{membId}
+			AND TD.MGRAPP_ID = TU.MGRAPP_ID
+ </select> 
+	
+	
+	
+	<update id="insertTbMgrAppUser"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		MERGE INTO TB_MGRAPP_USER TMU
+			USING (
+				SELECT
+					#{mgrappLoginId} MGRAPP_LOGIN_ID,
+					#{mgrappId}  MGRAPP_ID
+					FROM	DUAL
+			) VAL ON (
+			TMU.MGRAPP_LOGIN_ID=VAL.MGRAPP_LOGIN_ID
+			AND TMU.MGRAPP_ID=VAL.MGRAPP_ID
+			)
+			WHEN MATCHED THEN
+				UPDATE SET
+					UUID= #{uuid}
+			WHEN NOT MATCHED THEN
+				INSERT (
+					MGRAPP_ID,
+					MGRAPP_LOGIN_ID,
+					DEVICE_TYPE,
+					PUSH_ID,
+					MGR_CON_STATUS,
+					REG_DT,
+					UPD_DT,
+					MGRAPP_VER,
+					<!-- VER_TYPE, -->
+					REG_ID,
+					UPD_ID,
+					JSON_SET_INFO,
+					LOGIN_FAIL_CNT,
+					UUID,
+					USER_NM,
+					OS_TYPE,
+					LOGIN_TYPE,
+					AGR_YN
+					<!-- MGRAPP_STATUS, -->
+					<!-- MGRAPP_LOGIN_DT, -->
+					<!-- LAST_CERT_DT, -->
+					<!-- LAST_LOGIN_FAIL_DT -->
+				)
+				VALUES (
+					#{mgrappId},
+					#{mgrappLoginId},
+					#{deviceType},
+					#{pushId,jdbcType=VARCHAR},
+					'N',
+					SYSDATE,
+					SYSDATE,
+					#{mgrappVer},
+					<!-- #{verType}, -->
+					'SYSTEM',
+					'SYSTEM',
+					#{jsonSetInfo},
+					#{loginFailCnt},
+					#{uuid},
+					#{userNm},
+					#{osType},
+					#{loginType},
+					'Y'
+					<!-- #{mgrappStatus}, -->
+					<!-- TO_DATE(#{mgrappLoginDt},'yyyymmddhh24miss'), -->
+					<!-- TO_DATE(#{lastCertDt},'yyyymmddhh24miss'), -->
+					<!-- TO_DATE(#{lastLoginFailDt},'yyyymmddhh24miss'), -->
+					
+				)
+	</update>
+	
+	
+	<update id="updateMgrAppUuid"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		UPDATE 
+			TB_MGRAPP_USER
+		SET UUID = #{uuid}
+		WHERE MGRAPP_LOGIN_ID =  #{mgrappLoginId}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId) ">
+		AND  MGRAPP_ID = #{mgrappId}
+		</if>
+	</update>
+	
+	<update id="updateMgrAppUserInfo"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		UPDATE 
+			TB_MGRAPP_USER
+		SET 
+			<if test="!@org.springframework.util.StringUtils@isEmpty(pushId) ">
+				PUSH_ID = #{pushId},
+			</if>
+			MGRAPP_LOGIN_DT = SYSDATE,
+			LOGIN_FAIL_CNT = 0,
+			MGR_CON_STATUS =#{mgrConStatus},
+			DEVICE_TYPE  = #{deviceType,jdbcType=VARCHAR} ,
+			MGRAPP_VER	= #{mgrappVer,jdbcType=VARCHAR} 
+		WHERE 1=1
+		<include refid="dynamicWhereTbMgrAppUser"/> 
+		
+		<!-- MGRAPP_LOGIN_ID =  #{mgrappLoginId} 
+		<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId) ">
+		AND  MGRAPP_ID = #{mgrappId}
+		</if> -->
+	</update>
+	
+	<update id="updateMgrConStatus"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		UPDATE 
+			TB_MGRAPP_USER
+		SET
+			MGR_CON_STATUS =#{mgrConStatus}
+		WHERE 1=1
+		
+		<include refid="dynamicWhereTbMgrAppUser"/> 
+		
+		<!-- <if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId) ">
+		AND  MGRAPP_ID = #{mgrappId}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappLoginId) ">
+		AND  MGRAPP_LOGIN_ID = #{mgrappLoginId}
+		</if> -->
+	</update>
+	
+	<delete id="deleteUser"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		DELETE FROM 
+		TB_MGRAPP_DEVICE
+		WHERE MGRAPP_ID =
+		(
+			SELECT 
+				TU.MGRAPP_ID
+			FROM TB_MGRAPP_USER TU, TB_MGRAPP_DEVICE TD
+			WHERE TD.MGRAPP_ID = TU.MGRAPP_ID
+			AND TD.MEMB_ID=#{membId}
+			AND TU.MGRAPP_LOGIN_ID =#{mgrappLoginId}
+		)
+		AND MEMB_ID = #{membId}
+	</delete>
+	
+	<delete id="deleteUserByMgrAppId"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		DELETE FROM 
+			TB_MGRAPP_DEVICE
+		WHERE 
+			MGRAPP_ID = #{mgrappId}
+		AND MEMB_ID = #{membId}
+	</delete>
+	
+	
+	
+	<select id="selectMgrAppPusthTargetUserList" resultMap="mgrAppUserInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO"> 
+		SELECT 
+				TU.MGRAPP_ID,
+				TU.MGRAPP_LOGIN_ID,
+				TO_CHAR(TU.MGRAPP_LOGIN_DT,'yyyymmddhh24miss') as MGRAPP_LOGIN_DT,
+				TU.DEVICE_TYPE,
+				TU.PUSH_ID,
+				TO_CHAR(TU.LAST_CERT_DT,'yyyymmddhh24miss') as LAST_CERT_DT,
+				TU.MGR_CON_STATUS,
+				TU.MGRAPP_STATUS,
+				TO_CHAR(TU.REG_DT,'yyyymmddhh24miss') as REG_DT,
+				TO_CHAR(TU.UPD_DT,'yyyymmddhh24miss') as UPD_DT,
+				TU.MGRAPP_VER,
+				TU.VER_TYPE,
+				TU.REG_ID,
+				TU.UPD_ID,
+				TU.JSON_SET_INFO,
+				TU.LOGIN_FAIL_CNT,
+				TO_CHAR(TU.LAST_LOGIN_FAIL_DT,'yyyymmddhh24miss') as LAST_LOGIN_FAIL_DT,
+				TU.UUID,
+				TU.USER_NM,
+				TU.OS_TYPE,
+				TU.LOGIN_TYPE
+			FROM TB_MGRAPP_USER TU, TB_MGRAPP_DEVICE TD
+			WHERE 1=1
+			AND TD.MEMB_ID=#{membId}
+			AND TD.MGRAPP_ID = TU.MGRAPP_ID
+			AND TU.MGRAPP_LOGIN_ID NOT IN (#{mgrappLoginId})
+ 	</select> 
+ 	
+ 	
+ 	
+	<update id="updateMgrUserPushId"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		UPDATE 
+			TB_MGRAPP_USER
+		SET PUSH_ID = #{pushId,jdbcType=VARCHAR}
+		,PUSH_KEY_REG_YN = #{pushKeyRegYn}
+		WHERE MGRAPP_LOGIN_ID =  #{mgrappLoginId}
+		AND  MGRAPP_ID = #{mgrappId}	
+	</update>
+	
+	<select id="selectMgrappDevice" resultMap="mgrAppUserInfo" parameterType="String"> 
+		SELECT
+			MGRAPP_ID
+		FROM
+			TB_MGRAPP_DEVICE
+		WHERE
+			MEMB_ID = #{membId}
+ 	</select> 	
+ 	
+ 	<select id="selectMgrappUser" resultMap="mgrAppUserInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+ 		SELECT 
+ 			MGRAPP_LOGIN_ID
+ 		FROM 
+ 			TB_MGRAPP_USER
+ 		WHERE
+ 			MGRAPP_ID in
+ 			<foreach collection="arrMgrappId" item="item" index="index" separator="," open="(" close=")">
+    			#{item}
+			</foreach> 		
+ 	</select>
+ 	
+	<select id="selectEvMgrAppPusthTargetUserList" resultMap="mgrAppUserInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO"> 
+		SELECT 
+				TU.MGRAPP_ID,
+				TU.MGRAPP_LOGIN_ID,
+				TO_CHAR(TU.MGRAPP_LOGIN_DT,'yyyymmddhh24miss') as MGRAPP_LOGIN_DT,
+				TU.DEVICE_TYPE,
+				TU.PUSH_ID,
+				TO_CHAR(TU.LAST_CERT_DT,'yyyymmddhh24miss') as LAST_CERT_DT,
+				TU.MGR_CON_STATUS,
+				TU.MGRAPP_STATUS,
+				TO_CHAR(TU.REG_DT,'yyyymmddhh24miss') as REG_DT,
+				TO_CHAR(TU.UPD_DT,'yyyymmddhh24miss') as UPD_DT,
+				TU.MGRAPP_VER,
+				TU.VER_TYPE,
+				TU.REG_ID,
+				TU.UPD_ID,
+				TU.JSON_SET_INFO,
+				TU.LOGIN_FAIL_CNT,
+				TO_CHAR(TU.LAST_LOGIN_FAIL_DT,'yyyymmddhh24miss') as LAST_LOGIN_FAIL_DT,
+				TU.UUID,
+				TU.USER_NM,
+				TU.OS_TYPE,
+				TU.LOGIN_TYPE
+			FROM TB_MGRAPP_USER TU, TB_MGRAPP_DEVICE TD
+			WHERE 1=1
+			AND TD.MEMB_ID=#{membId}
+			AND TD.MGRAPP_ID = TU.MGRAPP_ID
+			AND TU.MGRAPP_LOGIN_ID IN
+	 			<foreach collection="arrMgrappLoginId" item="item" index="index" separator="," open="(" close=")">
+	    			#{item}
+				</foreach> 			
+ 	</select>
+ 	
+	<select id="selectDeviceModelId" resultType="String" parameterType="String">
+	    SELECT 
+	            CD.DEVICE_MODEL_ID
+	    FROM 
+	            TB_MEMB MB
+	           ,TB_MGRAPP_DEVICE AD
+	           ,TB_MGRAPP_USER  AU
+	           ,TB_CONN_DEVICE   CD 
+	    WHERE 1=1
+	    AND MB.MEMB_ID = AD.MEMB_ID
+	    AND AD.MGRAPP_ID = AU.MGRAPP_ID
+	    AND MB.MEMB_ID = CD.MEMB_ID
+	    AND MB.USE_YN = 'Y'
+	    AND MB.USE_STATUS = '01'
+	    AND AU.MGRAPP_LOGIN_ID = #{mgrappLoginId}     
+	    AND ROWNUM = 1
+	</select> 	
+ 	
+</mapper>

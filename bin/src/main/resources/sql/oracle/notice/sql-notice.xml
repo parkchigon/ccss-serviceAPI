@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="Notice">
+
+	<resultMap id="noticeVO" type="com.lgu.ccss.common.model.NoticeVO">
+			<result property="index"			column="RNUM" />
+			<result property="notiId"			column="NOTI_ID" />
+			<result property="notiTitle"		column="NOTI_TITLE" />
+			<result property="notiImportance"	column="NOTI_IMPORTANCE" />
+			<result property="exposureYn"		column="EXPOSURE_YN" />
+			<result property="pushYn"			column="PUSH_YN" />
+			<result property="serviceCategory"	column="SERVICE_CATEGORY" />
+			<result property="notiStartDt"		column="NOTI_START_DT" />
+			<result property="notiEndDt"		column="NOTI_END_DT" />
+			<result property="notiCont"			column="NOTI_CONT" />
+			<result property="notiType"			column="NOTI_TYPE" />
+			<result property="serviceExposure"	column="SERVICE_EXPOSURE" />
+			<result property="firmVer"			column="FIRM_VER" />
+			<result property="contType"			column="CONT_TYPE" />
+			
+			<result property="regId"			column="REG_ID" />
+			<result property="regDt"			column="REG_DT" />
+			<result property="updId"			column="UPD_ID" />
+			<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+	
+
+	<select id="selectNoticeList" resultMap="noticeVO" parameterType="com.lgu.ccss.common.model.NoticeVO">
+		SELECT
+			*
+		FROM
+		(
+			SELECT
+				A.*,
+				ROWNUM AS RNUM,
+				COUNT(*) OVER() AS TOTAL_COUNT
+			FROM
+			(
+				SELECT
+					NOTI_ID,
+					NOTI_TITLE,
+					NOTI_CONT,
+					NOTI_IMPORTANCE,
+					SERVICE_CATEGORY,
+					TO_CHAR(REG_DT,'YYYY-MM-DD') as REG_DT,
+					CONT_TYPE
+				FROM TB_NOTICE
+				WHERE 1=1
+				<!-- <if test="serviceCategory != null"> -->
+				AND SERVICE_CATEGORY IN (#{serviceCategory},'ALL')
+				<!-- AND SERVICE_EXPOSURE IN (#{serviceExposure},'ALL') -->
+				AND SERVICE_EXPOSURE = #{serviceExposure}
+				<!-- </if> -->
+				AND EXPOSURE_YN = 'Y'
+			  <!--   AND TO_CHAR(NOTI_START_DT,'YYYY-MM-DD HH24:MI')   <![CDATA[<=]]> TO_CHAR(SYSDATE ,'YYYY-MM-DD HH24:MI') 
+				AND TO_CHAR(SYSDATE ,'YYYY-MM-DD HH24:MI')  <![CDATA[<]]>   TO_CHAR(NOTI_END_DT,'YYYY-MM-DD HH24:MI')  -->
+				AND NOTI_START_DT  <![CDATA[<=]]> SYSDATE
+				AND NOTI_END_DT  <![CDATA[>=]]>  SYSDATE
+			ORDER BY NOTI_IMPORTANCE DESC, REG_DT DESC
+			) A
+		)
+		WHERE
+		RNUM <![CDATA[>=]]> (#{startPosition}+1) AND RNUM <![CDATA[<]]>  (#{startPosition}+1) + #{reqCount}
+	</select>
+	
+	<select id="selectCarddeckNotice" resultMap="noticeVO" parameterType="com.lgu.ccss.common.model.NoticeVO">
+		SELECT
+			FIRM_VER,
+			NOTI_TITLE,
+			NOTI_CONT,
+			CONT_TYPE
+		FROM
+			TB_NOTICE
+		WHERE
+			EXPOSURE_YN = 'Y'
+		AND
+			SERVICE_CATEGORY = #{serviceCategory}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(firmVer) ">
+			AND FIRM_VER = #{firmVer}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(serviceExposure) ">
+			AND SERVICE_EXPOSURE = #{serviceExposure}
+		</if>
+		AND
+			NOTI_START_DT  <![CDATA[<=]]> SYSDATE
+		AND 
+			NOTI_END_DT  <![CDATA[>=]]>  SYSDATE
+		ORDER BY 
+			NOTI_START_DT ASC
+	</select> 
+	
+
+</mapper>

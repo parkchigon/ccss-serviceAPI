@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="SmsCert">
+
+	 <resultMap id="mgrAppSmsCertInfoVO" type="com.lgu.ccss.common.model.mgr.MgrAppSmsCertInfoVO">
+			<result property="mgrappCtn"		column="MGRAPP_CTN" />
+		<result property="mgrappCtn"		column="MGRAPP_CTN" />
+		<result property="certNo"			column="CERT_NO" />
+		<result property="execScnCd"		column="EXEC_SCN_CD" />
+		<result property="smsAuthExpDt"		column="SMS_AUTH_EXP_DT" />
+		<result property="expiredStatus"	column="MGRAPP_LOGIN_DT" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+
+		
+	<select id="getCertNo" resultMap="mgrAppSmsCertInfoVO" parameterType="com.lgu.ccss.common.model.mgr.MgrAppSmsCertInfoVO">
+		SELECT ROWNUM_TABLE.* FROM(
+			SELECT 
+				SMS_AUTH_SEQ,
+				EXEC_SCN_CD,
+				TO_CHAR(SMS_AUTH_EXP_DT,'yyyymmddhh24miss') as SMS_AUTH_EXP_DT,
+				MGRAPP_CTN,
+				REG_ID,
+				TO_CHAR(REG_DT,'yyyymmddhh24miss') as REG_DT,
+				UPD_ID,
+				TO_CHAR(UPD_DT,'yyyymmddhh24miss') as UPD_DT,
+				CERT_NO
+			FROM TB_SMS_AUTHINFO
+			WHERE MGRAPP_CTN = #{mgrappCtn}
+			) ROWNUM_TABLE
+		WHERE ROWNUM <![CDATA[ = ]]> 1	
+	</select>
+	
+	<insert id="setCertInfo"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppSmsCertInfoVO">
+		INSERT INTO TB_SMS_AUTHINFO (
+			SMS_AUTH_SEQ,
+			MGRAPP_CTN,
+			CERT_NO,
+			SMS_AUTH_EXP_DT,
+			EXEC_SCN_CD,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		)
+		VALUES 
+		(
+		 	SEQ_SMS_AUTHINFO_01.NEXTVAL,
+			#{mgrappCtn},
+			#{certNo},
+			SYSDATE+(3/24/60),
+			#{execScnCd},
+			'SYSTEM',
+			SYSDATE,
+			'SYSTEM',
+			SYSDATE
+		)
+	</insert>
+	
+	
+	<select id="getCertInfoConfirm" resultMap="mgrAppSmsCertInfoVO" parameterType="com.lgu.ccss.common.model.mgr.MgrAppSmsCertInfoVO">
+		SELECT
+			SMS_AUTH_SEQ,
+			MGRAPP_CTN, 
+			CERT_NO, 
+			SMS_AUTH_EXP_DT,
+			CASE 
+				WHEN SMS_AUTH_EXP_DT <![CDATA[ >=]]> SYSDATE THEN 'S'
+				WHEN SMS_AUTH_EXP_DT <![CDATA[ < ]]> SYSDATE THEN 'F'
+			END AS EXPIRED_STATUS
+		FROM 
+			TB_SMS_AUTHINFO
+		WHERE 
+		MGRAPP_CTN = #{mgrappCtn}
+		<!-- AND CERT_NO = #{certNo} -->
+	</select>
+	
+	<delete id="setCertNoDel"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppSmsCertInfoVO">
+		DELETE FROM TB_SMS_AUTHINFO
+		WHERE SMS_AUTH_SEQ = #{smsAuthSeq}
+	</delete>
+</mapper>

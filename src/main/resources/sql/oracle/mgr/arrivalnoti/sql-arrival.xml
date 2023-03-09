@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="Arrival">
+
+	<resultMap id="arrivalAlarmSet" type="com.lgu.ccss.common.model.ArrivalAlarmSetVO">
+			<result property="arrivalAlarmId"	column="ARRIVAL_ALARM_ID" />
+			<result property="membId"			column="MEMB_ID" />
+			<result property="useYn"			column="USE_YN" />
+			<result property="targetAddr"		column="TARGET_ADDR" />
+			<result property="targetLonx"		column="TARGET_LONX" />
+			<result property="targetLaty"		column="TARGET_LATY" />
+			<result property="regId"			column="REG_ID" />
+			<result property="regDt"			column="REG_DT" />
+			<result property="updId"			column="UPD_ID" />
+			<result property="updDt"			column="UPD_DT" />
+			<result property="name"			    column="NAME" />
+			<result property="roadjibun"	    column="ROAD_JIBUN" />
+	</resultMap>
+	
+	
+	
+	<resultMap id="arrivalAlarmRcpt" type="com.lgu.ccss.common.model.ArrivalAlarmRcptVO">
+			<result property="arrivalAlarmId"		column="ARRIVAL_ALARM_ID" />
+			<result property="arrivalAlarmRcptId"	column="ARRIVAL_ALARM_RCPT_ID" />
+			<result property="membId"			column="MEMB_ID" />
+			<result property="rcptNm"			column="RCPT_NM" />
+			<result property="rcptCtn"			column="RCPT_CTN" />
+			<result property="regId"			column="REG_ID" />
+			<result property="regDt"			column="REG_DT" />
+			<result property="updId"			column="UPD_ID" />
+			<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+	
+	
+	<resultMap id="arrivalSearch" type="com.lgu.ccss.mgr.arrival.model.rcpt.search.ResultArrivalSearchVO">
+			<result property="index"				column="RNUM" />
+			<result property="arrivalAlarmId"		column="ARRIVAL_ALARM_ID" />
+			<result property="arrivalAlarmRcptId"	column="ARRIVAL_ALARM_RCPT_ID" />
+			<result property="membId"				column="MEMB_ID" />
+			<result property="useYn"				column="USE_YN" />
+			<result property="address"				column="TARGET_ADDR" />
+			<result property="lonx"					column="TARGET_LONX" />
+			<result property="laty"					column="TARGET_LATY" />
+			<result property="rcptNm"				column="RCPT_NM" />
+			<result property="rcptCtn"				column="RCPT_CTN" />
+	</resultMap>
+	
+	
+	
+	<sql id="dynamicWhereTbArrivalAlarmSet">
+		 <if test="!@org.springframework.util.StringUtils@isEmpty(membId) ">
+			AND MEMB_ID = #{membId}	
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(arrivalAlarmId) ">
+			AND ARRIVAL_ALARM_ID = #{arrivalAlarmId}	
+		</if> 
+	</sql>
+		
+	<sql id="dynamicWhereTbArrivalAlarmRcpt">
+		 <if test="!@org.springframework.util.StringUtils@isEmpty(membId) ">
+			AND MEMB_ID = #{membId}	
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(arrivalAlarmId) ">
+			AND ARRIVAL_ALARM_ID = #{arrivalAlarmId}	
+		</if> 
+		<if test="!@org.springframework.util.StringUtils@isEmpty(arrivalAlarmRcptId) ">
+			AND ARRIVAL_ALARM_RCPT_ID = #{arrivalAlarmRcptId}	
+		</if> 
+	</sql>
+	
+	
+	<select id="selectArrivalAlarmInfo" resultMap="arrivalSearch" parameterType="com.lgu.ccss.common.model.ArrivalAlarmSetVO">
+	SELECT
+			*
+		FROM
+		(
+			SELECT
+				A.*,
+				ROWNUM AS RNUM,
+				COUNT(*) OVER() AS TOTAL_COUNT
+			FROM
+			(
+			
+				SELECT 
+					ARRIVAL_ALARM_ID,
+					MEMB_ID,
+					TARGET_ADDR,
+					TARGET_LONX,
+					TARGET_LATY,
+					USE_YN,
+					TO_CHAR(REG_DT,'YYYY-MM-DD HH24:MI:SS') as REG_DT,
+					NAME,
+					ROAD_JIBUN
+				FROM	TB_ARRIVAL_ALARM_SET
+				WHERE 1=1
+				AND MEMB_ID = #{membId}
+			ORDER BY REG_DT DESC
+			) A
+		)
+		WHERE
+		RNUM <![CDATA[>=]]> (#{startPosition}+1) AND RNUM <![CDATA[<]]>  (#{startPosition}+1) + #{reqCount}
+	</select>
+	
+	<select id="selectUsedArrivalAlarmInfo" resultMap="arrivalAlarmSet" parameterType="com.lgu.ccss.common.model.ArrivalAlarmSetVO">
+		SELECT 
+			ARRIVAL_ALARM_ID,
+			MEMB_ID,
+			TARGET_ADDR,
+			TARGET_LONX,
+			TARGET_LATY,
+			USE_YN,
+			TO_CHAR(REG_DT,'YYYY-MM-DD HH24:MI:SS') as REG_DT
+		FROM	TB_ARRIVAL_ALARM_SET
+		WHERE USE_YN = 'Y'
+		AND MEMB_ID = #{membId}
+		ORDER BY REG_DT DESC
+	</select>
+	
+	<select id="selectArrivalRcptInfo" resultMap="arrivalSearch" parameterType="com.lgu.ccss.common.model.ArrivalAlarmSetVO">
+			SELECT 
+				ARRIVAL_ALARM_ID,
+				ARRIVAL_ALARM_RCPT_ID,
+				MEMB_ID,
+				RCPT_NM,
+				RCPT_CTN
+			FROM	TB_ARRIVAL_ALARM_RCPT
+			WHERE 1=1
+			AND MEMB_ID = #{membId} 
+			AND ARRIVAL_ALARM_ID =#{arrivalAlarmId}
+	</select>
+	
+	<update id="insertArrivalAlarmInfo" parameterType="com.lgu.ccss.common.model.ArrivalAlarmSetVO">
+		MERGE INTO TB_ARRIVAL_ALARM_SET TAAS
+			USING DUAL ON (
+				TAAS.MEMB_ID = #{membId}
+			)
+			WHEN MATCHED THEN
+				UPDATE SET
+					TARGET_ADDR =#{targetAddr},
+					TARGET_LONX =#{targetLonx},
+					TARGET_LATY =#{targetLaty},
+					USE_YN = #{useYn},
+					UPD_ID = 'SYSTEM',
+					UPD_DT = SYSDATE ,
+					NAME = #{name},
+					ROAD_JIBUN = #{roadjibun, jdbcType=VARCHAR}
+			WHEN NOT MATCHED THEN
+				INSERT (
+					ARRIVAL_ALARM_ID,
+					MEMB_ID,
+					TARGET_ADDR,
+					TARGET_LONX,
+					TARGET_LATY,
+					USE_YN,
+					REG_ID,
+					REG_DT,
+					UPD_ID,
+					UPD_DT,
+					NAME ,
+					ROAD_JIBUN
+				)
+				VALUES 
+				(	
+				 	#{arrivalAlarmId},
+					#{membId},
+					#{targetAddr},
+					#{targetLonx},
+					#{targetLaty},
+					#{useYn},
+					'SYSTEM',
+					SYSDATE,
+					'SYSTEM',
+					SYSDATE,
+					#{name},
+					#{roadjibun, jdbcType=VARCHAR}
+				)
+	</update>
+
+	<!--다중 도착 알림 설정 가능시 변경  -->
+	<!-- 	<insert id="insertArrivalAlarmInfo" parameterType="com.lgu.ccss.common.model.ArrivalAlarmSetVO">	
+		INSERT INTO TB_ARRIVAL_ALARM_SET
+		(	
+			ARRIVAL_ALARM_ID,
+			MEMB_ID,
+			TARGET_ADDR,
+			TARGET_LONX,
+			TARGET_LATY,
+			USE_YN,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		)
+		VALUES
+		(
+		
+			#{arrivalAlarmId},
+			#{membId},
+			#{targetAddr},
+			#{targetLonx},
+			#{targetLaty},
+			#{useYn},
+			'SYSTEM',
+			SYSDATE,
+			'SYSTEM',
+			SYSDATE
+			
+		)
+	</insert>  -->
+	
+	
+	
+
+	
+	<update  id="updateArrivalAlarmInfo"  parameterType="com.lgu.ccss.common.model.ArrivalAlarmSetVO">
+		UPDATE
+			TB_ARRIVAL_ALARM_SET
+		SET 
+			TARGET_ADDR =#{targetAddr},
+			TARGET_LONX =#{targetLonx},
+			TARGET_LATY =#{targetLaty},
+			USE_YN = #{useYn},
+			UPD_ID = 'SYSTEM',
+			UPD_DT = SYSDATE,
+			NAME =#{name},
+			ROAD_JIBUN = #{roadjibun, jdbcType=VARCHAR}
+			WHERE 1=1
+			<include refid="dynamicWhereTbArrivalAlarmSet"/> 	
+	</update>
+	
+	<delete id="deleteArrivalAlarmInfo"  parameterType="com.lgu.ccss.common.model.ArrivalAlarmSetVO">
+		DELETE
+			TB_ARRIVAL_ALARM_SET
+		WHERE 1=1
+		<include refid="dynamicWhereTbArrivalAlarmSet"/> 
+	</delete>
+	
+	
+	
+	<delete id="deleteArrivalAlarmRcpt"  parameterType="com.lgu.ccss.common.model.ArrivalAlarmRcptVO">
+		DELETE
+			TB_ARRIVAL_ALARM_RCPT 
+		WHERE 1=1
+		<include refid="dynamicWhereTbArrivalAlarmRcpt"/> 
+	</delete>
+	
+	
+	<update id="insertArrivalAlarmRcpt" parameterType="com.lgu.ccss.common.model.ArrivalAlarmRcptVO">
+		MERGE INTO TB_ARRIVAL_ALARM_RCPT TAAR
+			USING (
+				SELECT
+					#{membId} MEMB_ID,
+					#{arrivalAlarmId}  ARRIVAL_ALARM_ID,
+					#{rcptCtn}  		RCPT_CTN
+					FROM	DUAL
+			) VAL ON (
+			TAAR.MEMB_ID=VAL.MEMB_ID
+			AND TAAR.ARRIVAL_ALARM_ID =VAL.ARRIVAL_ALARM_ID
+			AND TAAR.RCPT_CTN =VAL.RCPT_CTN
+			)
+			WHEN MATCHED THEN
+				UPDATE SET
+					RCPT_NM =#{rcptNm},
+					UPD_ID = 'SYSTEM',
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT (
+					ARRIVAL_ALARM_ID,
+					ARRIVAL_ALARM_RCPT_ID,
+					MEMB_ID,
+					RCPT_NM,
+					RCPT_CTN,
+					REG_ID,
+					REG_DT,
+					UPD_ID,
+					UPD_DT
+				)
+				VALUES 
+				(	
+				 	#{arrivalAlarmId},
+					#{arrivalAlarmRcptId},
+					#{membId},
+					#{rcptNm},
+					#{rcptCtn},
+					'SYSTEM',
+					SYSDATE,
+					'SYSTEM',
+					SYSDATE
+				)
+	</update>
+	
+</mapper>

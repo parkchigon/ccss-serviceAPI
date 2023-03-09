@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+
+<mapper namespace="DevicePushSession">
+	
+	<resultMap id="DevicePushSessionMap" type="com.lgu.ccss.common.model.DevicePushSessVO">
+		<result property="devicePushSessionId" column="DEVICE_PUSH_SESSION_ID" />
+		<result property="deviceCtn" column="DEVICE_CTN" />
+		<result property="usimSn" column="USIM_SN" />
+		<result property="devicePushConnDt" column="DEVICE_PUSH_CONN_DT" />
+		<result property="devicePushConnIp" column="DEVICE_PUSH_CONN_IP" />
+		<result property="connDeviceId" column="CONN_DEVICE_ID" />
+		<result property="membId" column="MEMB_ID" />
+
+	</resultMap>
+	
+	<update id="insertDevicePushSession" parameterType="com.lgu.ccss.common.model.DevicePushSessVO">
+		MERGE INTO TB_DEVICE_PUSH_SESS
+			USING DUAL ON (DEVICE_PUSH_SESSION_ID = #{devicePushSessionId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					DEVICE_PUSH_CONN_DT = TO_DATE(#{devicePushConnDt},'yyyymmddhh24miss'),
+					DEVICE_PUSH_CONN_IP = #{devicePushConnIp}
+			WHEN NOT MATCHED THEN
+				INSERT (
+					DEVICE_PUSH_SESSION_ID,
+					DEVICE_CTN,
+					USIM_SN,
+					DEVICE_PUSH_CONN_DT,
+					DEVICE_PUSH_CONN_IP,
+					CONN_DEVICE_ID,
+					MEMB_ID
+				)
+				VALUES (
+					#{devicePushSessionId},
+					#{deviceCtn},
+					#{usimSn},
+					TO_DATE(#{devicePushConnDt},'yyyymmddhh24miss'),
+					#{devicePushConnIp},
+					#{connDeviceId},
+					#{membId}
+				)
+	</update>
+    
+	<select id="selectDevicePushSession" resultMap="DevicePushSessionMap" parameterType="com.lgu.ccss.common.model.DevicePushSessVO">
+		SELECT
+			DEVICE_PUSH_SESSION_ID,
+			DEVICE_CTN,
+			USIM_SN,
+			TO_CHAR(DEVICE_PUSH_CONN_DT,'yyyymmddhh24miss') as DEVICE_PUSH_CONN_DT,
+			DEVICE_PUSH_CONN_IP,
+			CONN_DEVICE_ID,
+			MEMB_ID
+		FROM 
+			TB_DEVICE_PUSH_SESS
+		WHERE
+			DEVICE_PUSH_SESSION_ID = #{devicePushSessionId}
+	</select>
+	
+	<delete id="deleteDevicePushSessByID" parameterType="com.lgu.ccss.common.model.DevicePushSessVO">
+		DELETE
+		FROM
+			TB_DEVICE_SESS
+		WHERE 
+			DEVICE_PUSH_SESSION_ID = #{devicePushSessionId}
+	</delete>
+	
+	<delete id="deleteDevicePushSessByCTN" parameterType="com.lgu.ccss.common.model.DevicePushSessVO">
+		DELETE
+		FROM
+			TB_DEVICE_PUSH_SESS
+		WHERE 
+			DEVICE_CTN = #{deviceCtn}
+	</delete>
+</mapper>

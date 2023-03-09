@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="Voice">
+
+	<resultMap id="VoiceVerVO" type="com.lgu.ccss.common.model.VoiceVerVO" autoMapping="true">
+		<result property="voiceVerNo" column="VOICE_VER_NO" />
+		<result property="version" column="VER" />
+		<result property="useYn" column="USE_YN" />
+		<result property="regId" column="REG_ID" />
+		<result property="regDt" column="REG_DT" />
+		<result property="updId" column="UPD_ID" />
+		<result property="updDt" column="UPD_DT" />
+	</resultMap>
+	
+	<resultMap id="VoiceDomainVO" type="com.lgu.ccss.common.model.VoiceDomainVO" autoMapping="true">
+		<result property="name" column="DOMAIN" />
+		<result property="exposureRatio" column="EXPOSURE_RATIO" />
+	</resultMap>
+	
+	<resultMap id="VoiceGuideVO" type="com.lgu.ccss.common.model.VoiceGuideVO" autoMapping="true">
+		<result property="domain" column="DOMAIN" />
+		<result property="command" column="COMMAND" />
+		<result property="priority" column="PRIO_YN" />
+		<result property="level" column="GUIDE_LEVEL" />
+	</resultMap>
+	
+	<select id="selectVoiceVersion" resultMap="VoiceVerVO"  parameterType="com.lgu.ccss.common.model.VoiceVerVO">
+		SELECT
+			VOICE_VER_NO,
+			VER,
+			USE_YN,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM
+			TB_VOICE_VER
+		WHERE
+			USE_YN='Y'
+			AND MARKET_TYPE = #{marketType}
+	</select>
+	
+	<select id="selectVoiceDomainList" resultMap="VoiceDomainVO"  parameterType="com.lgu.ccss.common.model.VoiceDomainVO">
+		SELECT DISTINCT 
+			VD.DOMAIN,
+			VD.EXPOSURE_RATIO
+		FROM
+			TB_VOICE_DOMAIN VD, TB_VOICE_GUIDE VG
+			WHERE VD.VOICE_DOMAIN_NO = VG.VOICE_DOMAIN_NO
+			AND VD.MARKET_TYPE = #{marketType}
+			AND VD.VOICE_DOMAIN_NO > 0
+			AND VG.VOICE_VER_NO = #{voiceVerNo}
+			AND VG.EXPOSURE_YN = 'Y'
+			
+	</select>
+	
+	<select id="selectVoiceGuideList" resultMap="VoiceGuideVO" parameterType="com.lgu.ccss.common.model.VoiceVerVO">
+		SELECT
+            VD.DOMAIN,
+            VG.COMMAND,
+            VG.PRIO_YN,
+            VG.GUIDE_LEVEL
+		FROM
+            TB_VOICE_GUIDE VG, TB_VOICE_DOMAIN VD 
+            WHERE VG.VOICE_VER_NO = #{voiceVerNo}
+            AND VG.VOICE_DOMAIN_NO = VD.VOICE_DOMAIN_NO
+            AND VG.EXPOSURE_YN = 'Y'
+	</select>
+</mapper>

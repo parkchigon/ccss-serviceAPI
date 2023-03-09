@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="Version">
+
+	<resultMap id="appInfo" type="com.lgu.ccss.common.model.mgr.MgrAppVO">
+		<result property="appId" 				column="APP_ID" />
+		<result property="appNm"				column="APP_NM" />
+		<result property="appVer"				column="APP_VER" />
+		<result property="appFileNm"			column="APP_FILE_NM" />
+		<result property="appMarketUrl"			column="APP_MARKET_URL" />
+		<result property="forcedUpdYn"			column="FORCED_UPD_YN" />
+		<result property="appType"				column="APP_TYPE" />
+		<result property="useYn"				column="USE_YN" />
+		<result property="appCont"				column="APP_CONT" />
+		<result property="pushStartDt"			column="PUSH_START_DT" />
+		<result property="pushEndDt"			column="PUSH_END_DT" />
+		<result property="pushNotiYn"			column="PUSH_NOTI_YN" />
+		<result property="osType"				column="OS_TYPE" />
+	</resultMap>
+
+		
+	<select id="selectCurrentMagrAppVersion" resultMap="appInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppVO">
+		SELECT ROWNUM_TABLE.* FROM(
+			SELECT 
+				APP_ID,
+				APP_NM,
+				APP_VER,
+				APP_FILE_NM,
+				APP_MARKET_URL,
+				TO_CHAR(REG_DT,'yyyymmddhh24miss') as REG_DT,
+				FORCED_UPD_YN,
+				APP_TYPE,
+				USE_YN,
+				UPD_DT,
+				APP_CONT,
+				OS_TYPE,
+				TO_CHAR(PUSH_START_DT,'yyyymmddhh24miss') as PUSH_START_DT,
+				TO_CHAR(PUSH_END_DT,'yyyymmddhh24miss') as PUSH_END_DT,
+				PUSH_NOTI_YN
+			FROM 
+				TB_APP
+			WHERE USE_YN ='Y'
+			AND APP_TYPE = #{appType}
+			AND OS_TYPE = #{osType}
+			AND APP_VER <![CDATA[ > ]]> #{appVer}
+			ORDER BY APP_VER DESC
+		) ROWNUM_TABLE
+		WHERE ROWNUM <![CDATA[ = ]]> 1
+	</select> 
+	
+	<select id="selectNewestMagrAppVersion" resultMap="appInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppVO">
+		SELECT ROWNUM_TABLE.* FROM(
+			SELECT 
+				APP_ID,
+				APP_NM,
+				APP_VER,
+				APP_FILE_NM,
+				APP_MARKET_URL,
+				TO_CHAR(REG_DT,'yyyymmddhh24miss') as REG_DT,
+				FORCED_UPD_YN,
+				APP_TYPE,
+				USE_YN,
+				UPD_DT,
+				APP_CONT,
+				OS_TYPE,
+				TO_CHAR(PUSH_START_DT,'yyyymmddhh24miss') as PUSH_START_DT,
+				TO_CHAR(PUSH_END_DT,'yyyymmddhh24miss') as PUSH_END_DT,
+				PUSH_NOTI_YN
+			FROM 
+				TB_APP
+			WHERE USE_YN ='Y'
+			AND APP_TYPE = #{appType}
+			AND OS_TYPE = #{osType}
+			ORDER BY APP_VER DESC
+		) ROWNUM_TABLE
+		WHERE ROWNUM <![CDATA[ = ]]> 1
+	</select> 
+</mapper>

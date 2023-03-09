@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+
+<mapper namespace="DeviceSession">
+	
+	<resultMap id="DeviceSessionMap" type="com.lgu.ccss.common.model.DeviceSessVO">
+		<result property="deviceSessId" column="DEVICE_SESS_ID" />
+		<result property="deviceCtn" column="DEVICE_CTN" />
+		<result property="usimSn" column="USIM_SN" />
+		<result property="deviceLoginDt" column="DEVICE_LOGIN_DT" />
+		<result property="deviceSessExpDt" column="DEVICE_SESS_EXP_DT" />
+		<result property="deviceConnIp" column="DEVICE_CONN_IP" />
+		<result property="connDeviceId" column="CONN_DEVICE_ID" />
+		<result property="membId" column="MEMB_ID" />
+		<result property="deviceSerial" column="DEVICE_SERIAL" />
+		<result property="membNo" column="MEMB_NO" />
+
+	</resultMap>
+	
+	<update id="insertDeviceSession" parameterType="com.lgu.ccss.common.model.DeviceSessVO">
+		MERGE INTO TB_DEVICE_SESS
+			USING DUAL ON (DEVICE_SESS_ID = #{deviceSessId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					DEVICE_LOGIN_DT = TO_DATE(#{deviceLoginDt},'yyyymmddhh24miss'),
+					DEVICE_SESS_EXP_DT = TO_DATE(#{deviceSessExpDt},'yyyymmddhh24miss'),
+					DEVICE_CONN_IP = #{deviceConnIp}
+			WHEN NOT MATCHED THEN
+				INSERT (
+					DEVICE_SESS_ID,
+					CONN_DEVICE_ID,
+					MEMB_ID,
+					DEVICE_CTN,
+					USIM_SN,
+					DEVICE_CONN_IP,
+					DEVICE_LOGIN_DT,
+					DEVICE_SESS_EXP_DT,
+					DEVICE_SERIAL,
+					MEMB_NO
+				)
+				VALUES (
+					#{deviceSessId},
+					#{connDeviceId},
+					#{membId},
+					#{deviceCtn},
+					#{usimSn},
+					#{deviceConnIp},
+					TO_DATE(#{deviceLoginDt},'yyyymmddhh24miss'),
+					TO_DATE(#{deviceSessExpDt},'yyyymmddhh24miss'),
+					#{deviceSerial},
+					#{membNo}
+				)
+	</update>
+    
+	<select id="selectDeviceSession" resultMap="DeviceSessionMap" parameterType="com.lgu.ccss.common.model.DeviceSessVO">
+		SELECT
+			DEVICE_SESS_ID,
+			DEVICE_CTN,
+			USIM_SN,
+			TO_CHAR(DEVICE_LOGIN_DT,'yyyymmddhh24miss') as DEVICE_LOGIN_DT,
+			TO_CHAR(DEVICE_SESS_EXP_DT,'yyyymmddhh24miss') as DEVICE_SESS_EXP_DT,
+			DEVICE_CONN_IP,
+			CONN_DEVICE_ID,
+			MEMB_ID,
+			DEVICE_SERIAL,
+			MEMB_NO
+		FROM 
+			TB_DEVICE_SESS
+		WHERE
+			DEVICE_SESS_ID = #{deviceSessId}
+	</select>
+	
+	<update id="updateDeviceSessTime" parameterType="com.lgu.ccss.common.model.DeviceSessVO">
+		update TB_DEVICE_SESS
+		SET 
+			DEVICE_SESS_EXP_DT = TO_DATE(#{deviceSessExpDt},'yyyymmddhh24miss'),
+			DEVICE_CONN_IP = #{deviceConnIp}
+		WHERE
+			DEVICE_SESS_ID = #{deviceSessId}
+	</update>
+	
+	<delete id="deleteDeviceSessByID" parameterType="com.lgu.ccss.common.model.DeviceSessVO">
+		DELETE
+		FROM
+			TB_DEVICE_SESS
+		WHERE 
+			DEVICE_SESS_ID = #{deviceSessId}
+	</delete>
+	
+	<delete id="deleteDeviceSessByCTN" parameterType="com.lgu.ccss.common.model.DeviceSessVO">
+		DELETE
+		FROM
+			TB_DEVICE_SESS
+		WHERE 
+			DEVICE_CTN = #{deviceCtn}
+		AND 
+			DEVICE_SERIAL = #{deviceSerial}
+	</delete>
+</mapper>

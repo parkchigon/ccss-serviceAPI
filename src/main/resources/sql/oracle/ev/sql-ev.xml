@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="EvCharging">
+	
+	<update id="updateEvCharginginfo"  parameterType="com.lgu.ccss.common.model.ev.EvCharginginfoVO">
+		MERGE INTO TB_EV_CHRG_INFO
+			USING DUAL
+			ON (device_ctn = #{ctn})
+			WHEN MATCHED THEN
+				UPDATE SET
+					battery_capa = #{battery_capa},
+					drive_able_dist_air_use = #{drive_able_dist2},
+					drive_able_dist_air_nuse = #{drive_able_dist1},
+					expect_chrg_tm1 = #{expect_chrg_tm1},
+					expect_chrg_tm2 = #{expect_chrg_tm2},
+					expect_chrg_tm3 = #{expect_chrg_tm3},
+					car_use_dt = #{car_use_dt},
+					total_drive_dist = #{total_drive_dist},
+					chrg_status = #{chrg_status},
+					full_chrg_alarm = #{full_chrg_alarm},
+					last_upd_dt = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT(device_ctn, battery_capa, drive_able_dist_air_use, drive_able_dist_air_nuse, expect_chrg_tm1, expect_chrg_tm2, expect_chrg_tm3, car_use_dt, total_drive_dist, chrg_status, full_chrg_alarm, last_upd_dt)
+					VALUES(
+							#{ctn},
+							#{battery_capa},
+							#{drive_able_dist2},
+							#{drive_able_dist1},
+							#{expect_chrg_tm1},
+							#{expect_chrg_tm2},
+							#{expect_chrg_tm3},
+							#{car_use_dt},
+							#{total_drive_dist},
+							#{chrg_status},
+							#{full_chrg_alarm},
+							SYSDATE
+						  )
+	</update>
+
+</mapper>

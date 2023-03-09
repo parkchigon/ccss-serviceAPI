@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="MgrAppDevice">
+
+	 <resultMap id="mgrAppUserInfo" type="com.lgu.ccss.common.model.mgr.MgrAppDeviceVO">
+		<result property="membId"				column="MEMB_ID" />
+		<result property="mgrappId"				column="MGRAPP_ID" />
+		<result property="deviceNm"				column="DEVICE_NM" />
+		<result property="mainUseYn"			column="MAIN_USE_YN" />
+		<result property="regId"				column="REG_ID" />
+		<result property="updId"				column="UPD_ID" />
+		<result property="regDt"				column="REG_DT" />
+		<result property="updDt"				column="UPD_DT" />
+	</resultMap>
+	
+	<sql id="dynamicWhereTbMgrAppDevice">
+		<if test="!@org.springframework.util.StringUtils@isEmpty(membId) ">
+			AND MEMB_ID = #{membId}	
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId) ">
+			AND MGRAPP_ID = #{mgrappId}	
+		</if>
+		<if test="membIdArr !=null">
+			AND MEMB_ID IN 	
+			<foreach collection="membIdArr" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="mgrappIdArr !=null">
+			AND MEMB_ID IN 	
+			<foreach collection="mgrappIdArr" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</sql>
+	
+	
+	<update id="insertTbMgrAppDevice"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppDeviceVO">
+		MERGE INTO TB_MGRAPP_DEVICE TMD
+			USING (
+				SELECT
+					#{membId} MEMB_ID,
+					#{mgrappId}  MGRAPP_ID
+					FROM	DUAL
+			) VAL ON (
+			TMD.MEMB_ID=VAL.MEMB_ID
+			AND TMD.MGRAPP_ID=VAL.MGRAPP_ID
+			)
+			WHEN MATCHED THEN
+				UPDATE SET
+					DEVICE_NM= #{deviceNm,jdbcType=VARCHAR},
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+			
+			INSERT (
+				MEMB_ID,
+				MGRAPP_ID,
+				DEVICE_NM,
+				MAIN_USE_YN,
+				REG_ID,
+				REG_DT,
+				UPD_ID,
+				UPD_DT
+			)
+			VALUES 
+			(	
+			 	#{membId},
+			 	#{mgrappId},
+				#{deviceNm,jdbcType=VARCHAR},
+				#{mainUseYn},
+			 	'SYSTEM',
+				SYSDATE,
+				'SYSTEM',
+				SYSDATE
+			)
+	</update>
+	
+	<select id="selectMgrDeviceInfo" resultMap= "mgrAppUserInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppDeviceVO">
+		SELECT 
+			MGRAPP_ID,
+			MEMB_ID,
+			DEVICE_NM,
+			MAIN_USE_YN,
+			REG_ID,
+			UPD_ID,
+			TO_CHAR(REG_DT,'yyyymmddhh24miss') as REG_DT,
+			TO_CHAR(UPD_DT,'yyyymmddhh24miss') as UPD_DT 
+		FROM TB_MGRAPP_DEVICE
+		WHERE 1=1
+		<include refid="dynamicWhereTbMgrAppDevice"/> 
+	</select>
+	
+	<select id="selectMgrMainDeviceInfo" resultMap= "mgrAppUserInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppDeviceVO">
+		SELECT 
+			MGRAPP_ID,
+			MEMB_ID,
+			DEVICE_NM,
+			MAIN_USE_YN,
+			REG_ID,
+			UPD_ID,
+			TO_CHAR(REG_DT,'yyyymmddhh24miss') as REG_DT,
+			TO_CHAR(UPD_DT,'yyyymmddhh24miss') as UPD_DT 
+		FROM TB_MGRAPP_DEVICE
+		WHERE 
+			MGRAPP_ID = #{mgrappId}
+		AND
+			MAIN_USE_YN = 'Y'
+	</select>
+	
+	<update id="updateDeviceMainUseYn"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppDeviceVO">
+		UPDATE 
+			TB_MGRAPP_DEVICE
+		SET 
+			MAIN_USE_YN = #{mainUseYn}
+		WHERE MGRAPP_ID =  #{mgrappId}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(membId) ">
+		AND  MEMB_ID = #{membId}
+		</if>
+	</update>
+	
+	<update id="updateDeviceNm"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppDeviceVO">
+		UPDATE 
+			TB_MGRAPP_DEVICE
+		SET 
+			DEVICE_NM = #{deviceNm}
+		WHERE MGRAPP_ID =  #{mgrappId}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(membId) ">
+		AND  MEMB_ID = #{membId}
+		</if>
+	</update>
+	
+	
+	<delete id="deleteDevice"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppDeviceVO">
+		DELETE 
+			TB_MGRAPP_DEVICE
+		WHERE MGRAPP_ID = #{mgrappId}
+		AND MEMB_ID = #{membId}
+	</delete>
+	
+	
+	<delete id="removeTbMgrAppDevice"  parameterType="com.lgu.ccss.common.model.mgr.MgrAppUserVO">
+		DELETE 
+			TB_MGRAPP_DEVICE
+		WHERE MGRAPP_ID IN ( SELECT MGRAPP_ID FROM TB_MGRAPP_USER WHERE MGRAPP_LOGIN_ID = #{mgrappLoginId})
+	</delete>
+	
+	
+	<update id="updateMainUseYn" parameterType="com.lgu.ccss.common.model.mgr.MgrAppDeviceVO"> 
+		UPDATE
+			TB_MGRAPP_DEVICE
+		SET
+			MAIN_USE_YN = #{mainUseYn},
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE 1=1
+		AND  MEMB_ID = #{membId}	
+		AND  MGRAPP_ID = #{mgrappId}
+	</update>
+	
+	
+</mapper>

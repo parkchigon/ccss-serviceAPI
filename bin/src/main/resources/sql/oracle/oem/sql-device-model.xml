@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="DeviceModel">
+	<resultMap id="deviceModel" type="com.lgu.ccss.common.model.DeviceModelVO">
+		<result property="deviceModelId" 	column="DEVICE_MODEL_ID" />
+		<result property="oemId"			column="OEM_ID" />
+		<result property="deviceModelNm"	column="DEVICE_MODEL_NM" />
+		<result property="deviceType"		column="DEVICE_TYPE" />
+		<result property="firmwareNewVer"	column="FIRMWARE_NEW_VER" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+		<result property="clovaClientId"	column="CLOVA_CLIENT_ID" />
+		<result property="clovaClientSecret" column="CLOVA_CLIENT_SECRET" />
+	</resultMap>
+
+	<select id="selectDeviceModel" resultMap="deviceModel" parameterType="com.lgu.ccss.common.model.DeviceModelVO">
+		SELECT 
+			DEVICE_MODEL_ID,
+			OEM_ID,
+			DEVICE_MODEL_NM,
+			DEVICE_TYPE,
+			FIRMWARE_NEW_VER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM 
+			TB_DEVICE_MODEL
+		WHERE
+			DEVICE_MODEL_ID = #{deviceModelId}
+	</select>
+
+	<select id="selectDeviceModelByName" resultMap="deviceModel" parameterType="com.lgu.ccss.common.model.DeviceModelVO">
+		SELECT 
+			DEVICE_MODEL_ID,
+			OEM_ID,
+			DEVICE_MODEL_NM,
+			DEVICE_TYPE,
+			FIRMWARE_NEW_VER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM 
+			TB_DEVICE_MODEL
+		WHERE
+			DEVICE_MODEL_NM = #{deviceModelNm}
+		AND
+			DEVICE_TYPE = #{deviceType}
+	</select>
+	
+	<select id="selectClovaClientInfo" resultMap="deviceModel" parameterType="com.lgu.ccss.common.model.DeviceModelVO">
+		SELECT 
+			DEVICE_MODEL_ID,
+			OEM_ID,
+			DEVICE_MODEL_NM,
+			DEVICE_TYPE,
+			FIRMWARE_NEW_VER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT,
+			CLOVA_CLIENT_ID,
+			CLOVA_CLIENT_SECRET
+		FROM 
+			TB_DEVICE_MODEL
+		WHERE DEVICE_MODEL_NM = #{deviceModelNm}
+	</select>
+	
+	<select id="selectClovaClientInfoByModelId" resultMap="deviceModel" parameterType="com.lgu.ccss.common.model.DeviceModelVO">
+		SELECT 
+			DEVICE_MODEL_ID,
+			OEM_ID,
+			DEVICE_MODEL_NM,
+			DEVICE_TYPE,
+			FIRMWARE_NEW_VER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT,
+			CLOVA_CLIENT_ID,
+			CLOVA_CLIENT_SECRET
+		FROM 
+			TB_DEVICE_MODEL
+		WHERE
+			DEVICE_MODEL_ID =#{deviceModelId}
+	</select>
+</mapper>

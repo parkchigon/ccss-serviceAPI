@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="Terms">
+
+	<resultMap id="membCommAgrVO" type="com.lgu.ccss.common.model.MembCommAgrVO">
+		<result property="membCommAgrNo"	column="COMM_AGR_SEQ" />
+		<result property="deviceCtn"		column="DEVICE_CTN" />
+		<result property="uiccId"			column="UICCID" />
+		<result property="termsNo"			column="TERMS_NO" />
+		<result property="termsAuthNo"		column="TERMS_AUTH_NO" />
+		<result property="agrYn"			column="AGR_YN" />
+		<result property="validStartDt"		column="VALID_START_DT" />
+		<result property="validEndDt"		column="VALID_END_DT" />
+		<result property="itemSn"		column="ITEM_SN" />
+		<result property="usimModelNm"		column="USIM_MODEL_NM" />
+		<result property="naviSn"		column="NAVI_SN" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+	
+	<resultMap id="membAgrVO" type="com.lgu.ccss.common.model.MembAgrVO">
+		<result property="membAgrNo"		column="MEMB_AGR_SEQ" />
+		<result property="membId"			column="MEMB_ID" />
+		<result property="termsNo"			column="TERMS_NO" />
+		<result property="termsAuthNo"		column="TERMS_AUTH_NO" />
+		<result property="agrYn"			column="AGR_YN" />
+		<result property="reAgrYn"			column="RE_AGR_YN" />
+		<result property="commAgrYn"		column="COMM_AGR_YN" />
+		<result property="validStartDt"		column="VALID_START_DT" />
+		<result property="validEndDt"		column="VALID_END_DT" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+	
+	<resultMap id="termsVO" type="com.lgu.ccss.common.model.TermsVO">
+		<result property="termsNo"			column="TERMS_NO" />
+		<result property="termsVer"			column="TERMS_VER" />
+		<result property="termsTitle"		column="TERMS_TITLE" />
+		<result property="termsCont"		column="TERMS_CONT" />
+		<result property="termsDiv"			column="TERMS_DIV" />
+		<result property="exposureYn"		column="EXPOSURE_YN" />
+		<result property="exposureStartDt"	column="EXPOSURE_START_DT" />
+		<result property="exposureEndDt"	column="EXPOSURE_END_DT" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+	
+	<select id="selectMembCommAgr" resultMap="membCommAgrVO" parameterType="com.lgu.ccss.common.model.MembCommAgrVO">
+		SELECT
+			COMM_AGR_SEQ,
+			DEVICE_CTN,
+			UICCID,
+			TERMS_NO,
+			TERMS_AUTH_NO,
+			AGR_YN,
+			VALID_START_DT,
+			VALID_END_DT,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM 
+			TB_MEMB_COMM_AGR
+		WHERE
+			UICCID = #{uiccId}
+		AND
+            AGR_YN = 'Y'
+        AND
+            VALID_END_DT >= SYSDATE
+        ORDER BY
+        	VALID_END_DT
+	</select>
+	
+	<insert id="insertMembCommAgr" parameterType="com.lgu.ccss.common.model.MembCommAgrVO">
+		INSERT INTO TB_MEMB_COMM_AGR (
+			COMM_AGR_SEQ,
+			UICCID,
+			AGR_YN,
+			VALID_START_DT,
+			VALID_END_DT,
+			ITEM_SN,
+			USIM_MODEL_NM,
+			NAVI_SN,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		)
+		VALUES (
+		 	SEQ_MEMB_COMM_AGR_01.NEXTVAL,
+			#{uiccId},
+			'Y',
+			#{validStartDt, jdbcType=DATE},
+			#{validEndDt, jdbcType=DATE},
+			#{itemSn},
+			#{usimModelNm},
+			#{naviSn},
+			#{regId},
+			SYSDATE,
+			#{updId},
+			SYSDATE
+		) 
+	</insert>
+	
+	<select id="selectMembAgr" resultMap="membAgrVO" parameterType="com.lgu.ccss.common.model.MembAgrVO">
+		SELECT
+			MEMB_AGR_SEQ,
+			MEMB_ID,
+			TERMS_NO, 
+			TERMS_AUTH_NO, 
+			AGR_YN,
+			RE_AGR_YN, 
+			COMM_AGR_YN, 
+			VALID_START_DT, 
+			VALID_END_DT,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM 
+			TB_MEMB_AGR
+		WHERE
+			MEMB_ID = #{membId}
+	</select>
+	
+	<select id="selectTermsByNo" resultMap="termsVO" parameterType="com.lgu.ccss.common.model.TermsVO">
+		SELECT
+			TERMS_NO,
+			TERMS_VER,
+			TERMS_TITLE,
+			TERMS_CONT,
+			TERMS_DIV,
+			EXPOSURE_YN,
+			EXPOSURE_START_DT,
+			EXPOSURE_END_DT,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM
+			TB_TERMS
+		WHERE
+			TERMS_NO = #{termsNo}
+		AND
+			EXPOSURE_YN = 'Y'
+	</select>
+	
+	<update id="insertMembAgr" parameterType="com.lgu.ccss.common.model.MembAgrVO">
+		MERGE INTO TB_MEMB_AGR
+			USING DUAL ON(MEMB_ID = #{membId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					AGR_YN = #{agrYn},
+					COMM_AGR_YN = #{commAgrYn},
+					UPD_ID = #{updId},
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT (
+					MEMB_AGR_SEQ,
+					MEMB_ID,
+					TERMS_NO,
+					TERMS_AUTH_NO,
+					AGR_YN,
+					RE_AGR_YN,
+					COMM_AGR_YN,
+					VALID_START_DT,
+					VALID_END_DT,
+					REG_ID,
+					REG_DT,
+					UPD_ID,
+					UPD_DT
+				)
+				VALUES (
+				 	SEQ_MEMB_AGR_01.NEXTVAL,
+					#{membId},
+					#{termsNo},
+					#{termsAuthNo},
+					#{agrYn},
+					#{reAgrYn},
+					#{commAgrYn},
+					TO_DATE(#{validStartDt},'YYYYMMDDHH24MISS'),
+					TO_DATE(#{validEndDt},'YYYYMMDDHH24MISS'),
+					#{regId},
+					SYSDATE,
+					#{updId},
+					SYSDATE
+				) 
+	</update>
+</mapper>

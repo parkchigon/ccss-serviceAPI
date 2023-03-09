@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="Mypagepnd">
+
+	<resultMap id="TermsMap" type="com.lgu.ccss.mypage.pnd.model.TermsVO">
+		<result property="termsNo" column="TERMS_NO" />
+		<result property="termsTitle" column="TERMS_TITLE" />
+		<result property="termsCont" column="TERMS_CONT" />
+		<result property="termsSortNum" column="TERMS_SORT_NUM" />
+		<result property="requiredYn" column="REQUIRED_YN" />
+	</resultMap>
+	<resultMap id="TermsMapAmMgrApp" type="com.lgu.ccss.mypage.pnd.model.TermsVO">
+		<result property="termsNo" column="TERMS_NO" />
+		<result property="termsTitle" column="TERMS_TITLE" />
+		<result property="termsCont" column="TERMS_CONT" />
+		<result property="requiredYn" column="REQUIRED_YN" />
+		<result property="termsDiv" column="TERMS_DIV"/>
+	</resultMap>
+
+	<select id="selectCurrentTerms" resultMap="TermsMap">
+	<!-- 전체 이용 약관을 불러 오고 있어서 APP 이용 약관도 PND 에 등록이 되고 있어 
+				쿼리문 수정   -->
+	<!--  	SELECT
+			TERMS_NO
+			,TERMS_TITLE
+			,TERMS_CONT
+			,TERMS_SORT_NUM
+			,REQUIRED_YN
+		FROM
+			TB_TERMS
+		WHERE 1 = 1
+			AND EXPOSURE_YN = 'Y'
+		ORDER BY
+			TERMS_SORT_NUM ASC  -->
+		  	SELECT
+				TERMS_NO,
+				TERMS_TITLE,
+				TERMS_CONT,
+				TERMS_DIV,
+	               REQUIRED_YN
+			FROM
+				TB_TERMS
+			WHERE
+				EXPOSURE_YN = 'Y' 
+			AND
+				TERMS_DIV BETWEEN 1 AND 6 
+		
+	</select>
+
+	<select id="selectOneCurrentServiceTerms" resultMap="TermsMap">
+		SELECT
+			TERMS_NO
+			,TERMS_TITLE
+			,TERMS_CONT
+			,TERMS_SORT_NUM
+			,REQUIRED_YN
+		FROM
+			TB_TERMS
+		WHERE 1 = 1
+			AND EXPOSURE_YN = 'Y'
+			AND TERMS_DIV = '1'
+			AND ROWNUM = 1
+	</select>
+	
+	
+	<select id="selectOneMobileServieTerms" parameterType="com.lgu.ccss.mypage.pnd.model.TermsVO"  resultMap="TermsMapAmMgrApp">
+		SELECT
+			TERMS_NO,
+			TERMS_TITLE,
+			TERMS_CONT,
+			REQUIRED_YN,
+			TERMS_DIV
+		FROM
+			TB_TERMS
+		WHERE
+		TERMS_DIV = #{termsDiv}
+		AND
+			EXPOSURE_YN = 'Y'
+			
+	</select>
+	<!-- ORDER BY REG_DT, TERMS_DIV, TERMS_VER DESC -->
+
+	<!-- <insert id="insertDeviceSession_back" parameterType="com.lgu.ccss.common.model.DeviceSessVO"> 
+		INSERT INTO TB_DEVICE_SESS ( DEVICE_SESS_ID, CONN_DEVICE_ID, MEMB_ID, DEVICE_CTN, 
+		USIM_SN, DEVICE_LOGIN_DT, DEVICE_SESS_EXP_DT, DEVICE_CONN_IP ) VALUES ( #{deviceSessId}, 
+		#{connDeviceId}, #{membId}, #{deviceCtn}, #{usimSn}, #{deviceLoginDt}, #{deviceSessExpDt}, 
+		#{deviceConnIp} ) </insert> -->
+	<!-- <select id="selectDeviceSession" resultMap="DeviceSessionMap" parameterType="com.lgu.ccss.common.model.DeviceSessVO"> 
+		SELECT DEVICE_SESS_ID, DEVICE_CTN, USIM_SN, TO_CHAR(DEVICE_LOGIN_DT,'yyyymmddhh24miss') 
+		as DEVICE_LOGIN_DT, TO_CHAR(DEVICE_SESS_EXP_DT,'yyyymmddhh24miss') as DEVICE_SESS_EXP_DT, 
+		DEVICE_CONN_IP, CONN_DEVICE_ID, MEMB_ID, DEVICE_SERIAL FROM TB_DEVICE_SESS 
+		WHERE DEVICE_SESS_ID = #{deviceSessId} </select> -->
+	<!-- <update id="updateSessionTime" parameterType="com.lgu.ccss.common.model.DeviceSessVO"> 
+		update TB_DEVICE_SESS SET DEVICE_SESS_EXP_DT = TO_DATE(#{deviceSessExpDt},'yyyymmddhh24miss'), 
+		DEVICE_CONN_IP = #{deviceConnIp} WHERE DEVICE_SESS_ID = #{deviceSessId} </update> -->
+	<!-- <delete id="deleteSessionInfo" parameterType="com.lgu.ccss.common.model.DeviceSessVO"> 
+		delete from TB_DEVICE_SESS where DEVICE_SESS_ID = #{deviceSessId} </delete> -->
+			
+	<!-- 20190128 kangjin -->	
+	<select id="getConnDeviceModel" parameterType="String" resultType="String">
+		SELECT 
+			 DEVICE_MODEL_ID
+		FROM 
+		     TB_CONN_DEVICE
+		WHERE 
+		     MEMB_ID = #{membId}
+	</select>
+</mapper>

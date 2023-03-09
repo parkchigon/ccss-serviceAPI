@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="MgrappInfotainAuthInfo">
+
+	 <resultMap id="mgrAppGCalendarUserInfo" type="com.lgu.ccss.common.model.mgr.MgrAppGCalendarUserVO">
+		<result property="mgrappId"				column="MGRAPP_ID" />
+		<result property="mgrappLoginId" column="MGRAPP_LOGIN_ID" /> 
+		<result property="mgrConStatus"			column="MGR_CON_STATUS" />
+		<result property="userNm"				column="USER_NM" />
+	</resultMap>
+	
+	 <resultMap id="mgrappInfotainAuthInfo" type="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		<result property="authInfoSeq" 	column="AUTH_INFO_SEQ" />
+		<result property="mgrappId"		column="MGRAPP_ID" />
+		<result property="serviceId"	column="SERVICE_ID" />
+		<result property="tokenSeq"		column="TOKEN_SEQ" />
+		<result property="tokenNm"		column="TOKEN_NM" />
+		<result property="tokenValue"	column="TOKEN_VALUE" />
+		<result property="useYn"		column="USE_YN" />
+		<result property="regId"		column="REG_ID" />
+		<result property="regDt"		column="REG_DT" />
+		<result property="updId"		column="UPD_ID" />
+		<result property="updDt"		column="UPD_DT" />
+		<result property="membId"		column="MEMB_ID" />
+	</resultMap>
+	
+	<update id="insertMgrappInfotatinAuthInfo" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		MERGE INTO TB_MGRAPP_INFOTAIN_AUTHINFO
+			USING DUAL ON(MGRAPP_ID = #{mgrappId} AND SERVICE_ID = #{serviceId} AND TOKEN_NM = #{tokenNm})
+			WHEN MATCHED THEN
+				UPDATE SET
+					TOKEN_VALUE = #{tokenValue},
+					UPD_ID = #{updId},
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT (
+					AUTH_INFO_SEQ,
+					MGRAPP_ID,
+					SERVICE_ID,
+					TOKEN_SEQ,
+					TOKEN_NM,
+					TOKEN_VALUE,
+					USE_YN,
+					REG_ID,
+					REG_DT,
+					UPD_ID,
+					UPD_DT
+				)
+				VALUES (
+					SEQ_MGRAPPINFOTAIN_AUTHINFO_01.NEXTVAL,
+					#{mgrappId},
+					#{serviceId},
+					#{tokenSeq},
+					#{tokenNm},
+					#{tokenValue},
+					#{useYn},
+					#{regId},
+					SYSDATE,
+					#{updId},
+					SYSDATE
+				) 
+	</update>
+		
+	<select id="selectMgrappInfotainAuthInfoByMembId" resultMap="mgrappInfotainAuthInfo" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		SELECT 
+				AUTH_INFO_SEQ,
+				MGRAPP_ID,
+				SERVICE_ID,
+				TOKEN_SEQ,
+				TOKEN_NM,
+				TOKEN_VALUE,
+				USE_YN,
+				REG_ID,
+				REG_DT,
+				UPD_ID,
+				UPD_DT
+		FROM 
+			TB_MGRAPP_INFOTAIN_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+	</select>
+	
+	<select id="selectMgrappInfotainAuthInfoByServiceId" resultMap="mgrappInfotainAuthInfo" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		SELECT 
+				AUTH_INFO_SEQ,
+				MGRAPP_ID,
+				SERVICE_ID,
+				TOKEN_SEQ,
+				TOKEN_NM,
+				TOKEN_VALUE,
+				USE_YN,
+				REG_ID,
+				REG_DT,
+				UPD_ID,
+				UPD_DT
+		FROM 
+			TB_MGRAPP_INFOTAIN_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+		AND
+			SERVICE_ID = #{serviceId}
+		ORDER BY 
+			AUTH_INFO_SEQ
+	</select>
+	
+	<select id="selectMgrappInfotainAuthInfoByTokenName" resultMap="mgrappInfotainAuthInfo" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		SELECT 
+				AUTH_INFO_SEQ,
+				MGRAPP_ID,
+				SERVICE_ID,
+				TOKEN_SEQ,
+				TOKEN_NM,
+				TOKEN_VALUE,
+				USE_YN,
+				REG_ID,
+				REG_DT,
+				UPD_ID,
+				UPD_DT
+		FROM 
+			TB_MGRAPP_INFOTAIN_AUTHINFO
+		WHERE
+			MGRAPP_ID = #{mgrappId}
+		AND
+			SERVICE_ID = #{serviceId}
+		AND 
+			TOKEN_NM = #{tokenNm}
+	</select>
+	
+	 <select id="selectMgrGCalendarUserInfoList" resultMap="mgrAppGCalendarUserInfo" parameterType="com.lgu.ccss.common.model.mgr.MgrAppGCalendarUserVO"> 
+		SELECT 
+				TU.MGRAPP_ID,
+				TU.MGRAPP_LOGIN_ID,
+				TU.MGR_CON_STATUS,
+				TU.USER_NM
+			FROM TB_MGRAPP_USER TU, TB_MGRAPP_DEVICE TD, TB_MGRAPP_INFOTAIN_AUTHINFO TA
+			WHERE 1=1
+			AND TD.MEMB_ID=#{membId}
+			AND TD.MGRAPP_ID = TU.MGRAPP_ID
+			AND TU.MGRAPP_ID = TA.MGRAPP_ID
+			AND TA.SERVICE_ID =#{serviceId}
+			AND TA.TOKEN_NM =#{tokenNm}
+ 	</select> 
+	
+	<update id="updateMgrappInfotainAuthInfoByTokenName" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		UPDATE
+			TB_MGRAPP_INFOTAIN_AUTHINFO
+		SET
+			TOKEN_VALUE = #{tokenValue},
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MGRAPP_ID = #{mgrappId}
+		AND
+			SERVICE_ID = #{serviceId}
+		AND 
+			TOKEN_NM = #{tokenNm}
+	</update>
+	
+	
+	
+	<delete id="deleteMgrappInfotainAuthInfoByMembId" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		DELETE
+		FROM
+			TB_MGRAPP_INFOTAIN_AUTHINFO
+		WHERE
+			MGRAPP_ID = #{mgrappId}
+	</delete>
+	
+	<delete id="deleteMgrappInfotainAuthInfoByServiceId" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		DELETE
+		FROM
+			TB_MGRAPP_INFOTAIN_AUTHINFO
+		WHERE
+			MGRAPP_ID = #{mgrappId}
+		AND
+			SERVICE_ID = #{serviceId}
+	</delete>
+	   
+	<delete id="deleteMgrappInfotainAuthInfoByTokenName" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		DELETE
+		FROM
+			TB_MGRAPP_INFOTAIN_AUTHINFO
+		WHERE
+			MGRAPP_ID = #{mgrappId}
+		AND
+			SERVICE_ID = #{serviceId}
+		AND 
+			TOKEN_NM = #{tokenNm}
+	</delete> 
+</mapper>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="Member">
+
+	<resultMap id="membVO" type="com.lgu.ccss.common.model.MembVO">
+		<result property="membId" 		 column="MEMB_ID" />
+		<result property="membNo"		 column="MEMB_NO" />
+		<result property="membCtn"		 column="MEMB_CTN" />
+		<result property="useStatus"	 column="USE_STATUS" />
+		<result property="useYn"		 column="USE_YN" />
+		<result property="newRejoinYn"	 column="NEW_REJOIN_YN" />
+		<result property="productNm"	 column="PRODUCT_NM" />
+		<result property="joinDt"		 column="JOIN_DT" />
+		<result property="loginFailCnt"	 column="LOGIN_FAIL_CNT" />
+		<result property="latestLoginDt" column="LATEST_LOGIN_DT" />
+		<result property="transToken"	 column="TRANS_TOKEN" />
+		<result property="serverId"		 column="SERVER_ID" />
+		<result property="payResvYn"	 column="PAY_RESV_YN" />
+		<result property="payResvDt"	 column="PAY_RESV_DT" />
+		<result property="marketType"	 column="MARKET_TYPE" />
+		<result property="expSmsSendYn"	 column="EXP_SMS_SEND_YN" />
+		<result property="expSmsSendDt"	 column="EXP_SMS_SEND_DT" />
+		<result property="birthYear"	 column="BIRTH_YEAR" />
+		<result property="gender" 		 column="GENDER" />
+		<result property="regId"		 column="REG_ID" />
+		<result property="regDt"		 column="REG_DT" />
+		<result property="updId"		 column="UPD_ID" />
+		<result property="updDt"		 column="UPD_DT" />
+		<result property="lastExpSmsSendYn"	 column="LAST_EXP_SMS_SEND_YN" />
+		<result property="lastExpSmsSendDt"	 column="LAST_EXP_SMS_SEND_DT" />
+		<result property="guestmodeAgrYn"	 column="GUESTMODE_AGR_YN" />
+	</resultMap>
+	
+	<select id="selectMemberForActiveStatus" resultMap="membVO" parameterType="com.lgu.ccss.common.model.MembVO">
+		SELECT
+			MEMB_ID,
+			MEMB_NO,
+			MEMB_CTN,
+			USE_STATUS,
+			USE_YN,
+			NEW_REJOIN_YN,
+			PRODUCT_NM,
+			JOIN_DT,
+			LATEST_LOGIN_DT,
+			LOGIN_FAIL_CNT,
+			TRANS_TOKEN,
+			SERVER_ID,
+			PAY_RESV_YN,
+			PAY_RESV_DT,
+			MARKET_TYPE,
+			EXP_SMS_SEND_YN,
+			EXP_SMS_SEND_DT,
+			BIRTH_YEAR,
+			GENDER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT,
+			LAST_EXP_SMS_SEND_YN,
+			LAST_EXP_SMS_SEND_DT
+		FROM 
+			TB_MEMB
+		WHERE
+			MEMB_CTN = #{membCtn} 
+		AND 
+			USE_STATUS NOT IN #{useStatus}
+	</select>
+	
+	<select id="selectMemberbyCTN" resultMap="membVO" parameterType="com.lgu.ccss.common.model.MembVO">
+		SELECT
+			MEMB_ID,
+			MEMB_NO,
+			MEMB_CTN,
+			USE_STATUS,
+			USE_YN,
+			NEW_REJOIN_YN,
+			PRODUCT_NM,
+			JOIN_DT,
+			LATEST_LOGIN_DT,
+			LOGIN_FAIL_CNT,
+			TRANS_TOKEN,
+			SERVER_ID,
+			PAY_RESV_YN,
+			PAY_RESV_DT,
+			MARKET_TYPE,
+			EXP_SMS_SEND_YN,
+			EXP_SMS_SEND_DT,
+			BIRTH_YEAR,
+			GENDER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT,
+			LAST_EXP_SMS_SEND_YN,
+			LAST_EXP_SMS_SEND_DT
+		FROM 
+			TB_MEMB
+		WHERE
+			MEMB_CTN = #{membCtn}
+	</select>
+	
+	<select id="selectMemberbyID" resultMap="membVO" parameterType="com.lgu.ccss.common.model.MembVO">
+		SELECT
+			MEMB_ID,
+			MEMB_NO,
+			MEMB_CTN,
+			USE_STATUS,
+			USE_YN,
+			NEW_REJOIN_YN,
+			PRODUCT_NM,
+			JOIN_DT,
+			LATEST_LOGIN_DT,
+			LOGIN_FAIL_CNT,
+			TRANS_TOKEN,
+			SERVER_ID,
+			PAY_RESV_YN,
+			PAY_RESV_DT,
+			MARKET_TYPE,
+			EXP_SMS_SEND_YN,
+			EXP_SMS_SEND_DT,
+			BIRTH_YEAR,
+			GENDER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT,
+			LAST_EXP_SMS_SEND_YN,
+			LAST_EXP_SMS_SEND_DT
+		FROM 
+			TB_MEMB
+		WHERE
+			MEMB_ID = #{membId}
+	</select>
+	<select id="selectMemberbyNO" resultMap="membVO" parameterType="com.lgu.ccss.common.model.MembVO">
+		SELECT
+			MEMB_ID,
+			MEMB_NO,
+			MEMB_CTN,
+			USE_STATUS,
+			USE_YN,
+			NEW_REJOIN_YN,
+			PRODUCT_NM,
+			JOIN_DT,
+			LATEST_LOGIN_DT,
+			LOGIN_FAIL_CNT,
+			TRANS_TOKEN,
+			SERVER_ID,
+			PAY_RESV_YN,
+			PAY_RESV_DT,
+			MARKET_TYPE,
+			EXP_SMS_SEND_YN,
+			EXP_SMS_SEND_DT,
+			BIRTH_YEAR,
+			GENDER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT,
+			LAST_EXP_SMS_SEND_YN,
+			LAST_EXP_SMS_SEND_DT
+		FROM 
+			TB_MEMB
+		WHERE
+			MEMB_NO = #{membNo}
+	</select>
+	<insert id="insertMember" parameterType="com.lgu.ccss.common.model.MembVO">
+		INSERT INTO TB_MEMB(
+			MEMB_ID,
+			MEMB_NO,
+			MEMB_CTN,
+			USE_STATUS,
+			USE_YN,
+			NEW_REJOIN_YN,
+			PRODUCT_NM,
+			JOIN_DT,
+			LATEST_LOGIN_DT,
+			LOGIN_FAIL_CNT,
+			TRANS_TOKEN,
+			SERVER_ID,
+			PAY_RESV_YN,
+			PAY_RESV_DT,
+			MARKET_TYPE,
+			EXP_SMS_SEND_YN,
+			EXP_SMS_SEND_DT,
+			BIRTH_YEAR,
+			GENDER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT,
+			LAST_EXP_SMS_SEND_YN,
+			LAST_EXP_SMS_SEND_DT
+		) VALUES (
+			#{membId},
+			#{membNo, jdbcType=VARCHAR},
+			#{membCtn, jdbcType=VARCHAR},
+			#{useStatus, jdbcType=VARCHAR},	
+			#{useYn, jdbcType=VARCHAR},		
+			#{newRejoinYn, jdbcType=VARCHAR},		
+			#{productNm, jdbcType=VARCHAR},		
+			#{joinDt, jdbcType=DATE},	
+			#{latestLoginDt, jdbcType=DATE},
+			#{loginFailCnt, jdbcType=INTEGER},	
+			#{transToken, jdbcType=VARCHAR},
+			#{serverId, jdbcType=VARCHAR},
+			#{payResvYn, jdbcType=VARCHAR},
+			#{payResvDt, jdbcType=DATE},
+			#{marketType, jdbcType=VARCHAR},
+			#{expSmsSendYn, jdbcType=VARCHAR},
+			#{expSmsSendDt, jdbcType=DATE},
+			#{birthYear, jdbcType=VARCHAR},
+			#{gender, jdbcType=VARCHAR},
+			#{regId},		
+			SYSDATE,		
+			#{updId},		
+			SYSDATE,
+			#{lastExpSmsSendYn, jdbcType=VARCHAR},
+			#{lastExpSmsSendDt, jdbcType=DATE}
+		)
+	</insert>
+	
+	<update id="updateMemberInfo" parameterType="com.lgu.ccss.common.model.MembVO">
+		UPDATE
+			TB_MEMB
+		SET
+			TRANS_TOKEN = #{transToken},
+			LOGIN_FAIL_CNT = #{loginFailCnt},
+			LATEST_LOGIN_DT = #{latestLoginDt},
+			<if test="!@org.springframework.util.StringUtils@isEmpty(productNm) ">
+			PRODUCT_NM = #{productNm},
+			</if>
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+	</update>
+	
+	<update id="updateMemberStatus" parameterType="com.lgu.ccss.common.model.MembVO">
+		UPDATE
+			TB_MEMB
+		SET
+			USE_STATUS = #{useStatus},
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+	</update>
+	
+	<update id="increaseLoginFailCnt" parameterType="com.lgu.ccss.common.model.MembVO">
+		UPDATE
+			TB_MEMB
+		SET
+			LOGIN_FAIL_CNT = (
+				SELECT nvl(LOGIN_FAIL_CNT, 0) +1
+				FROM TB_MEMB
+				WHERE MEMB_ID = #{membId}
+			),
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+	</update>
+	
+	<update id="clearLoginFailCnt" parameterType="com.lgu.ccss.common.model.MembVO">
+		UPDATE
+			TB_MEMB
+		SET
+			LOGIN_FAIL_CNT = 0,
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+	</update>
+	
+		
+	<select id="ckeckUserstatus" resultType ="int" parameterType="com.lgu.ccss.common.model.MembVO">
+		SELECT 
+			COUNT(*)
+		FROM	
+			TB_MEMB
+		WHERE USE_STATUS ='01' <!--01: 정상 / 02 : 일시정지 / 09 : 해지  -->
+		AND MEMB_ID IN 	
+		<foreach collection="membIdArr" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="ckeckMainUseYn" resultType="int" parameterType="com.lgu.ccss.common.model.MembVO">
+		SELECT 
+			COUNT(*)
+		FROM	
+			TB_MGRAPP_DEVICE
+		WHERE  MAIN_USE_YN ='Y' <!--Y: 주기기 / N : 부기기  -->
+		AND MGRAPP_ID= #{mgrappId}
+		AND MEMB_ID IN 	
+		<foreach collection="membIdArr" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+ 	</select>
+	
+	<update id="updateMemberPayResv" parameterType="com.lgu.ccss.common.model.MembVO">
+		UPDATE
+			TB_MEMB
+		SET
+			PAY_RESV_YN = #{payResvYn},
+			PAY_RESV_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+	</update>
+	
+	<select id="selectMemberGuestmodeAgrYn" resultMap="membVO" parameterType="com.lgu.ccss.common.model.MembVO">
+		SELECT
+			MEMB_ID,
+			MEMB_NO,
+			MEMB_CTN,
+			USE_STATUS,
+			USE_YN,
+			NEW_REJOIN_YN,
+			PRODUCT_NM,
+			JOIN_DT,
+			LATEST_LOGIN_DT,
+			LOGIN_FAIL_CNT,
+			TRANS_TOKEN,
+			SERVER_ID,
+			PAY_RESV_YN,
+			PAY_RESV_DT,
+			MARKET_TYPE,
+			EXP_SMS_SEND_YN,
+			EXP_SMS_SEND_DT,
+			BIRTH_YEAR,
+			GENDER,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT,
+			LAST_EXP_SMS_SEND_YN,
+			LAST_EXP_SMS_SEND_DT,
+			GUESTMODE_AGR_YN
+		FROM 
+			TB_MEMB
+		WHERE
+			MEMB_ID = #{membId}
+	</select>
+	
+	<update id="updateMemberGuestmodeAgrYn" parameterType="com.lgu.ccss.common.model.MembVO">
+		UPDATE
+			TB_MEMB
+		SET
+			GUESTMODE_AGR_YN = #{guestmodeAgrYn},
+			LATEST_LOGIN_DT = #{latestLoginDt},
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+	</update>
+</mapper>

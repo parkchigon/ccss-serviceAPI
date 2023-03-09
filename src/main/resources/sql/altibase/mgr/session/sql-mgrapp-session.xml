@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+
+<mapper namespace="MgrAppSession">
+	
+	<resultMap id="MgrAppSessionMap" type="com.lgu.ccss.common.model.mgr.MgrAppSessVO">
+		<result property="mgrappId" column="MGRAPP_ID" />
+		<result property="mgrappSessionId" column="MGRAPP_SESSION_ID" />
+		<result property="deviceType" column="DEVICE_TYPE" />
+		<result property="mgrappLoginDt" column="MGRAPP_LOGIN_DT" />
+		<result property="sessionExpDt" column="SESSION_EXP_DT" />
+		<result property="connIp" column="CONN_IP" />
+		<result property="randomKey" column="RANDOM_KEY" />
+		<result property="membId" column="MEMB_ID" />
+		
+		<result property="mgrappLoginId" column="MGRAPP_LOGIN_ID" /> 
+		<result property="osType" column="OS_TYPE" />
+		<result property="uuid" column="UUID" />
+	</resultMap>
+	
+	<select id="selectMgrSession" resultMap="MgrAppSessionMap" parameterType="com.lgu.ccss.common.model.mgr.MgrAppSessVO">
+		SELECT
+			MGRAPP_ID,
+			MGRAPP_SESSION_ID,
+			DEVICE_TYPE,
+			PUSH_ID,
+			TO_CHAR(MGRAPP_LOGIN_DT,'yyyymmddhh24miss') as MGRAPP_LOGIN_DT,
+			TO_CHAR(SESSION_EXP_DT,'yyyymmddhh24miss') as SESSION_EXP_DT,
+			CONN_IP,
+			RANDOM_KEY,
+			MEMB_ID,
+			MGRAPP_LOGIN_ID,
+			OS_TYPE,
+			UUID
+		<!-- 	,(SELECT MGRAPP_LOGIN_ID FROM TB_MGRAPP_USER WEHRE MGRAPP_ID = TB_MGRAPP_SESS.MGRAPP_ID) as MGRAPP_LOGIN_ID -->
+		FROM 
+			TB_MGRAPP_SESS
+		WHERE
+			MGRAPP_SESSION_ID = #{mgrappSessionId}
+	</select>
+	
+	<update id="updateMgrSessTime" parameterType="com.lgu.ccss.common.model.mgr.MgrAppSessVO">
+		update TB_MGRAPP_SESS
+		SET 
+			SESSION_EXP_DT = TO_DATE(#{sessionExpDt},'yyyymmddhh24miss'),
+			CONN_IP = #{connIp},
+			RANDOM_KEY = #{randomKey}
+		WHERE
+			MGRAPP_SESSION_ID = #{mgrappSessionId}
+	</update>
+	
+	<delete id="deleteMgrSessByID" parameterType="com.lgu.ccss.common.model.mgr.MgrAppSessVO">
+		DELETE
+		FROM
+			TB_MGRAPP_SESS
+		WHERE 
+			MGRAPP_SESSION_ID = #{mgrappSessionId}
+	</delete>
+	
+	<delete id="deleteMgrSessByMgrappId" parameterType="com.lgu.ccss.common.model.mgr.MgrAppSessVO">
+		DELETE
+		FROM
+			TB_MGRAPP_SESS
+		WHERE 
+			MGRAPP_ID = #{mgrappId}
+	</delete>
+	
+	<update id="insertMgrSession" parameterType="com.lgu.ccss.common.model.mgr.MgrAppSessVO">
+		MERGE INTO TB_MGRAPP_SESS
+			USING DUAL ON (MGRAPP_SESSION_ID = #{mgrappSessionId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					MGRAPP_LOGIN_DT = TO_DATE(#{mgrappLoginDt},'yyyymmddhh24miss'),
+					SESSION_EXP_DT = TO_DATE(#{sessionExpDt},'yyyymmddhh24miss'),
+					CONN_IP = #{connIp},
+					RANDOM_KEY = #{randomKey},
+					MGRAPP_LOGIN_ID = #{mgrappLoginId},
+					OS_TYPE= #{osType},
+					UUID=#{uuid}
+			WHEN NOT MATCHED THEN
+				INSERT (
+					MGRAPP_ID,
+					MGRAPP_SESSION_ID,
+					DEVICE_TYPE,
+					MGRAPP_LOGIN_DT,
+					SESSION_EXP_DT,
+					CONN_IP,
+					RANDOM_KEY,
+					MEMB_ID,
+					MGRAPP_LOGIN_ID,
+					OS_TYPE,
+					UUID
+				)
+				VALUES (
+					#{mgrappId},
+					#{mgrappSessionId},
+					#{deviceType},
+					SYSDATE,
+					TO_DATE(#{sessionExpDt},'yyyymmddhh24miss'),
+					#{connIp, jdbcType=VARCHAR},
+					#{randomKey},
+					#{membId},
+					#{mgrappLoginId},
+					#{osType},
+					#{uuid}
+				)
+	</update>
+	
+</mapper>

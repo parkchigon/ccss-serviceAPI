@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="Mypageev">
+
+	<resultMap id="EVMap" type="com.lgu.ccss.mypage.ev.model.EVVO">
+		<result property="deviceCtn" column="DEVICE_CTN" />
+		<result property="batteryCapa" column="BATTERY_CAPA" />
+		<result property="driveAbleDistAirUse" column="DRIVE_ABLE_DIST_AIR_USE" />
+		<result property="driveAbleDistAirNuse" column="DRIVE_ABLE_DIST_AIR_NUSE" />
+		<result property="expectChrgTm1" column="EXPECT_CHRG_TM1" />
+		<result property="expectChrgTm2" column="EXPECT_CHRG_TM2" />
+		<result property="expectChrgTm3" column="EXPECT_CHRG_TM3" />
+		<result property="carUseDt" column="CAR_USE_DT" />
+		<result property="totalDriveDist" column="TOTAL_DRIVE_DIST" />
+		<result property="chrgStatus" column="CHRG_STATUS" />
+		<result property="fullChrgAlarm" column="FULL_CHRG_ALARM" />
+		<result property="lastUpdDt" column="LAST_UPD_DT" />
+						
+	</resultMap>
+
+	<select id="selectEVChrgInfo" resultMap="EVMap">
+		SELECT
+			  DEVICE_CTN 
+			, BATTERY_CAPA  
+			, DRIVE_ABLE_DIST_AIR_USE  
+			, DRIVE_ABLE_DIST_AIR_NUSE  
+			, DECODE(TO_CHAR(TO_DATE(EXPECT_CHRG_TM1,'HH24MISS'), 'HH24'), '00', '', TO_NUMBER(TO_CHAR(TO_DATE(EXPECT_CHRG_TM1,'HH24MISS'), 'HH24')) || '시간 ') ||  
+              DECODE(TO_CHAR(TO_DATE(EXPECT_CHRG_TM1,'HH24MISS'), 'mi'),   '00', '', TO_NUMBER(TO_CHAR(TO_DATE(EXPECT_CHRG_TM1,'HH24MISS'), 'mi')) || '분') AS EXPECT_CHRG_TM1    
+			, DECODE(TO_CHAR(TO_DATE(EXPECT_CHRG_TM2,'HH24MISS'), 'HH24'), '00', '', TO_NUMBER(TO_CHAR(TO_DATE(EXPECT_CHRG_TM2,'HH24MISS'), 'HH24')) || '시간 ') ||  
+              DECODE(TO_CHAR(TO_DATE(EXPECT_CHRG_TM2,'HH24MISS'), 'mi'),   '00', '', TO_NUMBER(TO_CHAR(TO_DATE(EXPECT_CHRG_TM2,'HH24MISS'), 'mi')) || '분') AS EXPECT_CHRG_TM2
+            , DECODE(TO_CHAR(TO_DATE(EXPECT_CHRG_TM3,'HH24MISS'), 'HH24'), '00', '', TO_NUMBER(TO_CHAR(TO_DATE(EXPECT_CHRG_TM3,'HH24MISS'), 'HH24')) || '시간 ') ||  
+              DECODE(TO_CHAR(TO_DATE(EXPECT_CHRG_TM3,'HH24MISS'), 'mi'),   '00', '', TO_NUMBER(TO_CHAR(TO_DATE(EXPECT_CHRG_TM3,'HH24MISS'), 'mi')) || '분') AS EXPECT_CHRG_TM3
+			, CAR_USE_DT 
+			, TOTAL_DRIVE_DIST
+			, CHRG_STATUS
+			, FULL_CHRG_ALARM
+			, TO_CHAR(LAST_UPD_DT, 'YYYY"년" FMMM"월" FMDD"일" hh24:mi')	AS LAST_UPD_DT  
+		FROM
+			TB_EV_CHRG_INFO
+		
+		WHERE 
+			DEVICE_CTN = #{deviceCtn}
+	
+	</select>
+
+</mapper>

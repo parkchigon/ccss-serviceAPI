@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="GiftRegist">
+
+	<resultMap id="RegisterVO" type="com.lgu.ccss.common.model.datagift.RegisterVO">
+		<result property="lgdOid"	column="LGD_OID" />
+		<result property="lgdTid"	column="LGD_TID" />
+		<result property="issueNo"	column="ISSUE_NO" />
+		<result property="ctn"		column="CTN" />
+		<result property="result"	column="RESULT" />
+		<result property="resultCode"	column="RESULT_CODE" />
+		<result property="resultMessage"	column="RESULT_MESSAGE" />
+		<result property="giftNo"	column="GIFT_NO" />
+		<result property="useYn"	column="USE_YN" />
+		<result property="regDt"	column="REG_DT" />
+		<result property="regId"	column="REG_ID" />
+		<result property="updDt"	column="UPD_DT" />
+		<result property="updId"	column="UPD_ID" />
+	</resultMap>
+
+	<insert id="insertRegister" parameterType="com.lgu.ccss.common.model.datagift.RegisterVO">
+		INSERT INTO TB_GIFT_REG(
+			REG_SEQ,
+			LGD_OID,
+			LGD_TID,
+			ISSUE_NO,
+			CTN,
+			RESULT,
+			RESULT_CODE,
+			RESULT_MESSAGE,
+			GIFT_NO,
+			USE_YN,
+			REG_DT,
+			REG_ID,
+			UPD_DT,
+			UPD_ID
+		) VALUES (
+			TB_GIFT_REG_SEQ.nextval,
+			#{lgdOid, jdbcType=VARCHAR},	
+			#{lgdTid, jdbcType=VARCHAR},
+			#{issueNo, jdbcType=VARCHAR},
+			#{ctn, jdbcType=VARCHAR},
+			#{result, jdbcType=VARCHAR},
+			#{resultCode, jdbcType=VARCHAR},
+			#{resultMessage, jdbcType=VARCHAR},
+			#{giftNo, jdbcType=VARCHAR},
+			#{useYn, jdbcType=VARCHAR},
+			SYSDATE,
+			#{regId, jdbcType=VARCHAR},
+			SYSDATE,
+			#{updId, jdbcType=VARCHAR}
+		)	
+	</insert>
+	
+</mapper>

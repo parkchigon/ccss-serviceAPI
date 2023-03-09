@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="ClovaAuthInfo">
+
+	<resultMap id="clovaAuthInfo" type="com.lgu.ccss.common.model.clova.ClovaAuthInfoVO">
+		<result property="clovaAuthSeq" 	column="CLOVA_AUTH_SEQ" />
+		<result property="membId"			column="MEMB_ID" />
+		<result property="clovaToken"		column="CLOVA_TOKEN" />
+		<result property="refreshToken"		column="REFRESH_TOKEN" />
+		<result property="expiredTime"		column="EXPIRED_TIME" />
+		<result property="tokenType"		column="TOKEN_TYPE" />
+		<result property="loginStatus"		column="LOGIN_STATUS" />
+		<result property="loginType"		column="LOGIN_TYPE" />
+		<result property="nid"				column="N_ID" />
+		<result property="nAccessToken"		column="N_ACCESS_TOKEN" />
+		<result property="mgrappId"			column="MGRAPP_ID" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+	
+	<select id="selectClovaAuthInfo" resultMap="clovaAuthInfo" parameterType="com.lgu.ccss.common.model.clova.ClovaAuthInfoVO">
+		SELECT 
+			MEMB_ID,
+			CLOVA_TOKEN,
+			REFRESH_TOKEN,
+			<!-- TO_CHAR(EXPIRED_TIME,'YYYY-MM-DD HH24:MI:SS') as EXPIRED_TIME -->
+			EXPIRED_TIME,
+			LOGIN_STATUS,
+			LOGIN_TYPE,
+			TOKEN_TYPE,
+			N_ID,
+			N_ACCESS_TOKEN,
+			MGRAPP_ID,
+			REG_ID,
+			TO_CHAR(REG_DT,'YYYY-MM-DD HH24:MI:SS') as REG_DT,
+			UPD_ID,
+			TO_CHAR(UPD_DT,'YYYY-MM-DD HH24:MI:SS') as UPD_DT
+		FROM 
+			TB_CLOVA_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+		<!-- 	AND EXPIRED_TIME > SYSDATE -->
+	</select>
+	
+	<update id="insertClovaAuthInfo" parameterType="com.lgu.ccss.common.model.clova.ClovaAuthInfoVO">
+		MERGE INTO TB_CLOVA_AUTHINFO
+			USING DUAL ON(MEMB_ID = #{membId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					CLOVA_TOKEN   = #{clovaToken},
+					REFRESH_TOKEN = #{refreshToken},
+					EXPIRED_TIME  = #{expiredTime},
+					LOGIN_STATUS  = #{LoginStatus},
+					TOKEN_TYPE	  = #{tokenType},
+					<if test="!@org.springframework.util.StringUtils@isEmpty(nid)">
+						N_ID =  #{nid},
+					</if>
+					<if test="!@org.springframework.util.StringUtils@isEmpty(nAccessToken)">
+						N_ACCESS_TOKEN = #{nAccessToken},
+					</if>
+					<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId)">
+						MGRAPP_ID = #{mgrappId},
+					</if>
+					LOGIN_TYPE	  = #{loginType},
+					<if test='clovaUpdate == "Y"'>
+					REG_DT = SYSDATE,
+					</if>
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT (
+							MEMB_ID,
+							CLOVA_TOKEN,
+							REFRESH_TOKEN,
+							EXPIRED_TIME,
+							LOGIN_STATUS,
+							TOKEN_TYPE,
+							LOGIN_TYPE,
+							<if test="!@org.springframework.util.StringUtils@isEmpty(nid)">
+								N_ID ,
+							</if>
+							<if test="!@org.springframework.util.StringUtils@isEmpty(nAccessToken)">
+								N_ACCESS_TOKEN,
+							</if>
+							<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId)">
+								MGRAPP_ID,
+							</if>
+							REG_ID,
+							REG_DT,
+							UPD_ID,
+							UPD_DT
+					)
+				VALUES (
+					#{membId},
+					#{clovaToken},
+					#{refreshToken},
+					#{expiredTime},
+					#{LoginStatus},
+					#{tokenType},
+					#{loginType},
+					<if test="!@org.springframework.util.StringUtils@isEmpty(nid)">
+						#{nid},
+					</if>
+					<if test="!@org.springframework.util.StringUtils@isEmpty(nAccessToken)">
+						#{nAccessToken},
+					</if>
+					<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId)">
+						#{mgrappId},
+					</if>
+					#{regId},
+					SYSDATE,
+					#{updId},
+					SYSDATE
+				) 
+	</update>
+	
+	<delete id="deleteClovaAuthInfo" parameterType="com.lgu.ccss.common.model.clova.ClovaAuthInfoVO">
+		DELETE
+		FROM
+			TB_CLOVA_AUTHINFO
+		WHERE 
+			MEMB_ID = #{membId}
+	</delete> 
+	
+	<!-- 
+	<update id="updateAIAuthInfo" parameterType="com.lgu.ccss.common.model.AIAuthInfoVO">
+		UPDATE
+			TB_AI_AUTHINFO
+		SET
+			DEVICE_TOKEN = #{deviceToken},
+			PLATFORM_TOKEN = #{platforkToken},
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+	</update>
+	-->
+
+	   
+</mapper>

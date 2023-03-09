@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="InfotainAuthInfo">
+
+	<resultMap id="infotainAuthInfo" type="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		<result property="authInfoSeq" 	column="AUTH_INFO_SEQ" />
+		<result property="membId"		column="MEMB_ID" />
+		<result property="serviceId"	column="SERVICE_ID" />
+		<result property="tokenSeq"		column="TOKEN_SEQ" />
+		<result property="tokenNm"		column="TOKEN_NM" />
+		<result property="tokenValue"	column="TOKEN_VALUE" />
+		<result property="useYn"		column="USE_YN" />
+		<result property="regId"		column="REG_ID" />
+		<result property="regDt"		column="REG_DT" />
+		<result property="updId"		column="UPD_ID" />
+		<result property="updDt"		column="UPD_DT" />
+		<result property="mgrappId"		column="MGRAPP_ID" />
+	</resultMap>
+	
+	<update id="insertInfotatinAuthInfo" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		MERGE INTO TB_INFOTAIN_AUTHINFO
+			USING DUAL ON(MEMB_ID = #{membId} AND SERVICE_ID = #{serviceId} AND TOKEN_NM = #{tokenNm})
+			WHEN MATCHED THEN
+				UPDATE SET
+					TOKEN_VALUE = #{tokenValue},
+					UPD_ID = #{updId},
+					UPD_DT = SYSDATE
+					<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId)">
+					,MGRAPP_ID = #{mgrappId}
+					</if>
+			WHEN NOT MATCHED THEN
+				INSERT (
+					AUTH_INFO_SEQ,
+					MEMB_ID,
+					SERVICE_ID,
+					TOKEN_SEQ,
+					TOKEN_NM,
+					TOKEN_VALUE,
+					USE_YN,
+					REG_ID,
+					REG_DT,
+					UPD_ID,
+					UPD_DT
+					<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId)">
+					,MGRAPP_ID
+					</if>
+				)
+				VALUES (
+					SEQ_INFOTAIN_AUTHINFO_01.NEXTVAL,
+					#{membId},
+					#{serviceId},
+					#{tokenSeq},
+					#{tokenNm},
+					#{tokenValue},
+					#{useYn},
+					#{regId},
+					SYSDATE,
+					#{updId},
+					SYSDATE
+					<if test="!@org.springframework.util.StringUtils@isEmpty(mgrappId)">
+					,#{mgrappId}
+					</if>
+				) 
+	</update>
+		
+	<select id="selectInfotainAuthInfoByMembId" resultMap="infotainAuthInfo" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		SELECT 
+				AUTH_INFO_SEQ,
+				MEMB_ID,
+				SERVICE_ID,
+				TOKEN_SEQ,
+				TOKEN_NM,
+				TOKEN_VALUE,
+				USE_YN,
+				REG_ID,
+				REG_DT,
+				UPD_ID,
+				UPD_DT,
+				MGRAPP_ID
+		FROM 
+			TB_INFOTAIN_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+	</select>
+	
+	<select id="selectInfotainAuthInfoByServiceId" resultMap="infotainAuthInfo" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		SELECT 
+				AUTH_INFO_SEQ,
+				MEMB_ID,
+				SERVICE_ID,
+				TOKEN_SEQ,
+				TOKEN_NM,
+				TOKEN_VALUE,
+				USE_YN,
+				REG_ID,
+				REG_DT,
+				UPD_ID,
+				UPD_DT,
+				MGRAPP_ID
+		FROM 
+			TB_INFOTAIN_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+		AND
+			SERVICE_ID = #{serviceId}
+		ORDER BY 
+			AUTH_INFO_SEQ
+	</select>
+	
+	<select id="selectInfotainAuthInfoByTokenName" resultMap="infotainAuthInfo" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		SELECT 
+				AUTH_INFO_SEQ,
+				MEMB_ID,
+				SERVICE_ID,
+				TOKEN_SEQ,
+				TOKEN_NM,
+				TOKEN_VALUE,
+				USE_YN,
+				REG_ID,
+				REG_DT,
+				UPD_ID,
+				UPD_DT,
+				MGRAPP_ID
+		FROM 
+			TB_INFOTAIN_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+		AND
+			SERVICE_ID = #{serviceId}
+		AND 
+			TOKEN_NM = #{tokenNm}
+	</select>
+	
+	<update id="updateInfotainAuthInfoByTokenName" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		UPDATE
+			TB_INFOTAIN_AUTHINFO
+		SET
+			TOKEN_VALUE = #{tokenValue},
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+		AND
+			SERVICE_ID = #{serviceId}
+		AND 
+			TOKEN_NM = #{tokenNm}
+	</update>
+	
+	<delete id="deleteInfotainAuthInfoByMembId" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		DELETE
+		FROM
+			TB_INFOTAIN_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+	</delete>
+	
+	<delete id="deleteInfotainAuthInfoByServiceId" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		DELETE
+		FROM
+			TB_INFOTAIN_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+		AND
+			SERVICE_ID = #{serviceId}
+	</delete>
+	   
+	<delete id="deleteInfotainAuthInfoByTokenName" parameterType="com.lgu.ccss.common.model.InfotainAuthInfoVO">
+		DELETE
+		FROM
+			TB_INFOTAIN_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+		AND
+			SERVICE_ID = #{serviceId}
+		AND 
+			TOKEN_NM = #{tokenNm}
+	</delete>
+	   
+</mapper>

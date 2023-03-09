@@ -1,0 +1,118 @@
+push.auth=0003874857
+
+## \uc811\uc18d \uc815\ubcf4
+push.domain=211.115.75.227
+push.port1=5555
+push.port2=5556
+
+## \uc11c\ube44\uc2a4 \uad00\ub828 \ud0a4 value
+push.gcm.app.id=LGUCCSP
+
+push.gcm.service.id=30096
+push.gcm.service.passwd=a153da2571e163d0a71a686ed47e49ad4411e42026079c475ae84ee7611d37f72aaf9298b7f9f2f6d0fb78cec859219d08b00e1878ee3c2a264042e5562798c8
+push.gcm.api.key=AIzaSyC6_r_LjU0CtFcyvw0nVtyQv8m5KOBebGA
+push.gcm.application.id=connected_car_gcm
+
+
+push.apns.service.id=30097
+push.apns.service.passwd=520e8463e3c4cabe67a0483861b53131f84b5d3aada357b100d57ad6aa924be67d917e4bf3dd8b5de09a2f2f9fa16d9807923f41f189b5a88d2cc32bd3ba3237
+push.apns.application.id=connected_car_apns
+
+
+push.resquest.part.app=APP
+push.resquest.part.sp=APP
+
+
+
+## Api ID/URL \ub9ac\uc2a4\ud2b8
+
+#\ub2e8\uac74 \uc608\uc57d Push \ub4f1\ub85d
+push.book.single.id=push_book_single
+push.book.single.url=/restapi/push/book/single
+push.book.single.auth.key=C2B60647554F949BAAED
+#Bullk \uc608\uc57d Push \ub4f1\ub85d
+push.book.bulk.id=push_book_bulk
+push.book.bulk.url=/restapi/push/book/bulk
+push.book.bulk.auth.key=C696CDE65A2D14EEAB66
+#\uacf5\uc9c0 \uc608\uc57d Push \ub4f1\ub85d
+push.book.announce.id=push_book_announce
+push.book.announce.url=/restapi/push/book/announce
+push.book.announce.auth.key=C2DA3EF2773E6454E803
+#\uc608\uc57d Push \ubcc0\uacbd	
+push.book.modify.id=push_book_modify
+push.book.modify.url=/restapi/push/book/modify
+push.book.modify.auth.key=C90A8C361C37142099CC
+#Push \ub4f1\ub85d \uc0ad\uc81c	
+push.book.delete.id=push_book_delete
+push.book.delete.url=/restapi/push/book/delete
+push.book.delete.auth.key=CDB5BD2D6EF124E099FC
+#\uc608\uc57d Push \uc870\ud68c
+push.book.info.id=push_book_info
+push.book.info.url=/restapi/push/book/info
+push.book.info.auth.key=CD241B308963948B68DB
+#\uc608\uc57d Push \uc804\uc1a1 \uc911\ub2e8
+push.book.stop.id=push_book_stop
+push.book.stop.url=/restapi/push/book/stop
+push.book.stop.auth.key=C3B4B530A72C044ADB86
+#\uc608\uc57d Push \uc644\ub8cc \ub0b4\uc5ed \uc870\ud68c	
+push.book.completeinfo.id=push_book_completeinfo
+push.book.completeinfo.url=/restapi/push/book/completeinfo
+push.book.completeinfo.auth.key=C8C0F42E323634015944
+#Register \uac00\uc785\uc790 \uc870\ud68c
+subscriber.info.id=subscriber_info
+subscriber.info.url=/restapi/push/subscriber/info
+subscriber.info.auth.key=C2B1C36EE6DBF43EABDC
+#Push Noti ServicKey
+push.single.servicekey.id=push_single_servicekey
+push.single.servicekey.url=/restapi/push/single/servicekey
+push.single.servicekey.auth.key=C98D4364815B6472582A
+#Push Noti Token
+push.single.devicetoken.id=push_single_devicetoken
+push.single.devicetoken.url=/restapi/push/single/devicetoken
+push.single.devicetoken.auth.key=C0BA7A1FCD1874A28B64
+#Push Noti Multi
+push.multi.id=push_multi
+push.multi.url=/restapi/push/multi
+push.multi.auth.key=C4A3D68A570534BB291F
+#\uacf5\uc9c0Push Noti	
+push.announce.id=push_announce
+push.announce.url=/restapi/push/announce
+push.announce.auth.key=CD3E8CECD1C564BB9850
+#\ub2e8\ub9d0 \ub4f1\ub85d(POS)
+subscriber.register.pos.id=subscriber_register_pos
+subscriber.register.pos.url=/restapi/subscriber/register/pos
+subscriber.register.pos.auth.key=C1373595547394A55ACD
+
+
+#\ub2e8\ub9d0 \ub4f1\ub85d(GCM)
+subscriber.register.gcm.id=subscriber_register_gcm
+subscriber.register.gcm.url=/restapi/subscriber/register/gcm
+subscriber.register.gcm.auth.key=C2586D3C676F142AAA36
+#\ub2e8\ub9d0 \ub4f1\ub85d(APNS)
+subscriber.register.apns.id=subscriber_register_apns
+subscriber.register.apns.url=/restapi/subscriber/register/apns
+subscriber.register.apns.auth.key=CFC5332EF13B34F1F902
+#\ub2e8\ub9d0 \ub4f1\ub85d \uc0ad\uc81c
+subscriber.deregister.id=subscriber_deregister
+subscriber.deregister.url=/restapi/subscriber/deregister
+subscriber.deregister.auth.key=C17EF4518DE7247B2ADB
+
+
+
+#\ub2e8\ub9d0 \uc0c1\ud0dc \uc815\ubcf4 \ubcf4\uace0(GCM)
+subscriber.update.control.id=subscriber_update_control
+subscriber.update.control.url=/restapi/subscriber/update/control
+subscriber.update.control.auth.key=CEDE5C59A1449473695D
+
+
+
+
+## Method
+http.method.post=POST
+http.method.get=GET
+http.method.put=PUT
+http.method.del=DELETE
+
+
+http.client.connection.timeout=30000
+http.client.read.timeout=30000

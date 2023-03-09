@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="MgrappCallback">
+
+	<resultMap id="callBackInfoVO" type="com.lgu.ccss.common.model.CallBackInfoVO">
+		<result property="mgrappId" 	column="MGRAPP_ID" />
+		<result property="serviceCode"	column="SERVICE_CODE" />
+		<result property="returnData"	column="RETURN_DATA" />
+		<result property="regDt"		column="REG_DT" />
+		<result property="updDt"		column="UPD_DT" />
+	</resultMap>
+	
+	
+	
+	<select id="selectTbCallBackInfo" resultMap = "callBackInfoVO"  parameterType="com.lgu.ccss.common.model.CallBackInfoVO">
+		SELECT 
+			MGRAPP_ID,
+		 	RETURN_DATA,
+		 	TO_CHAR(UPD_DT,'YYYY-MM-DD HH24:MI:SS') as UPD_DT
+		 FROM TB_CALL_BACK_INFO
+		 WHERE  MGRAPP_ID = #{mgrappId}
+		 AND UPD_DT <![CDATA[>=]]>   SYSDATE - 1/24
+	</select>
+	
+	<update id="insertTbCallBackInfo" parameterType="com.lgu.ccss.common.model.CallBackInfoVO">
+		MERGE INTO TB_CALL_BACK_INFO
+			USING DUAL ON(MGRAPP_ID = #{mgrappId} AND SERVICE_CODE = #{serviceCode})
+			WHEN MATCHED THEN
+				UPDATE SET
+					RETURN_DATA = #{returnData},
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT (
+					MGRAPP_ID,
+					SERVICE_CODE,
+					RETURN_DATA,
+					REG_DT,
+					UPD_DT
+				)
+				VALUES (
+					#{mgrappId},
+					#{serviceCode},
+					#{returnData},
+					SYSDATE,
+					SYSDATE
+				) 
+	</update>
+		
+	
+	<delete id="deleteTbCallBackInfo" parameterType="com.lgu.ccss.common.model.CallBackInfoVO">
+		DELETE
+		FROM
+			TB_CALL_BACK_INFO
+		WHERE
+			MGRAPP_ID = #{mgrappId}
+	</delete>
+	
+	
+</mapper>

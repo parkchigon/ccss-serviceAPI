@@ -1,0 +1,2 @@
+src/main/webapp/resources/images/phone/icon_splash_car.png filter=lfs diff=lfs merge=lfs -text
+src/main/webapp/resources/images/phone/icon_splash_uplus_logo.png filter=lfs diff=lfs merge=lfs -text

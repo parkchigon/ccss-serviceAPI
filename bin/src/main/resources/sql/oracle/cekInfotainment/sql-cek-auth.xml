@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="CekAuthInfo">
+
+	<resultMap id="cekAiAuthInfo" type="com.lgu.ccss.common.model.CekAIAuthInfoVO">
+		
+		<result property="membId"			column="MEMB_ID" />
+		<result property="customId"			column="CUSTOM_ID" />
+		<result property="deviceToken"		column="DEVICE_TOKEN" />
+		<result property="createTime"		column="CREATE_TIME" />
+		<result property="nid"				column="N_ID" />
+		<result property="useYn"			column="USE_YN" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+	</resultMap>
+	
+	
+	<select id="selectCekAIAuthInfo" resultMap="cekAiAuthInfo" parameterType="com.lgu.ccss.common.model.CekAIAuthInfoVO">
+		SELECT 
+			MEMB_ID,
+			CUSTOM_ID,
+			DEVICE_TOKEN,
+			N_ID,
+			USE_YN,
+			TO_CHAR(CREATE_TIME,'yyyymmddhh24miss'),
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM 
+			TB_CEK_AI_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+	</select>
+	
+	
+
+	<update id="insertCekAIAuthInfo" parameterType="com.lgu.ccss.common.model.CekAIAuthInfoVO">
+		MERGE INTO TB_CEK_AI_AUTHINFO
+			USING DUAL ON(MEMB_ID = #{membId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					DEVICE_TOKEN = #{deviceToken},
+					CUSTOM_ID = #{customId},
+					CREATE_TIME = TO_DATE(#{createTime},'YYYY-MM-DD HH24:MI:SS'),
+					USE_YN = #{useYn},
+					UPD_ID = #{updId},
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT (
+					MEMB_ID,
+					CUSTOM_ID,
+					DEVICE_TOKEN,
+					CREATE_TIME,
+					N_ID,
+					USE_YN,
+					REG_ID,
+					REG_DT,
+					UPD_ID,
+					UPD_DT
+				)
+				VALUES (
+					#{membId},
+					#{customId},
+					#{deviceToken},
+					TO_DATE(#{createTime},'YYYY-MM-DD HH24:MI:SS'),
+					#{nid},
+					#{useYn},
+					#{regId},
+					SYSDATE,
+					#{updId},
+					SYSDATE
+				) 
+	</update>
+	
+	
+	<update id="updateCekAIAuthInfo" parameterType="com.lgu.ccss.common.model.CekAIAuthInfoVO">
+		UPDATE
+			TB_CEK_AI_AUTHINFO
+		SET
+			DEVICE_TOKEN = #{deviceToken},
+			CUSTOM_ID = #{customId},
+			CREATE_TIME = TO_DATE(#{createTime},'YYYY-MM-DD HH24:MI:SS'),
+			USE_YN = #{useYn},
+			NID  = #{nid},
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE
+			MEMB_ID = #{membId}
+	</update>
+	
+	<delete id="deleteCekAIAuthInfo" parameterType="com.lgu.ccss.common.model.CekAIAuthInfoVO">
+		DELETE
+		FROM
+			TB_CEK_AI_AUTHINFO
+		WHERE 
+			MEMB_ID = #{membId}
+	</delete>
+	   
+</mapper>

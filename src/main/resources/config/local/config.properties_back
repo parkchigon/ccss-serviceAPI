@@ -1,0 +1,127 @@
+## Common Properties
+common.systemId=SYSTEM
+common.hang.url=http://localhost:8080/api/internal/hang/check
+
+session.timeoutMin=1440
+mgrapp.session.timeoutMin=30
+
+app.hang.id=ccsp/service_api
+
+# AI Platform Properties
+ai.svrKey=f8d53805934d470b91531cd08cde3bc8
+
+ai.auth.url=http://112.172.129.170:9999
+ai.auth.connection.timeout=5000
+ai.auth.timeout=5000
+
+ai.weather.url=http://112.172.129.170:9998
+ai.weather.connection.timeout=5000
+ai.weather.timeout=5000
+
+ai.publicUrl=https://daiif.ai.uplus.co.kr
+
+## nCAS Properties
+ncas.url=http://112.172.129.170:9955/NIF/CASInterface.jsp
+ncas.cp.type=I
+ncas.cp.id=mdu_CCSS
+ncas.cp.pwd=2577seen!!
+ncas.cp.casecode=TF1251
+ncas.connection.timeout=5000
+ncas.timeout=5000
+
+ncas.sim.use=N
+ncas.sim.url=http://112.172.129.170:9955/NIF/CASInterface.jsp
+
+## ESB Properties
+esb.url=http://172.22.14.79:15011
+esb.system.id=CCSS0001
+esb.enable=N
+esb.real=N
+
+## KMC Properties
+kmc.returnUrl=http://112.172.131.224:8080/serviceApiSvrWebApp/mypage/pnd/authKmcResult.do
+kmc.cpId=LGUM1014
+#kmc.urlCode=008001
+kmc.urlCode=004002
+
+## IPIN Properties
+ipin.returnUrl=http://112.172.131.224:8080/serviceApiSvrWebApp/mypage/pnd/authIpinResult.do
+ipin.siteCode=BT20
+ipin.sitePw=Uplus12!
+
+service.ratePayment.period=365
+service.ratePayment.expirationNotiDay=335
+
+service.joiningDay=1
+
+member.agree.validMonth=12
+
+push.server = 112.172.129.150:1883
+push.protocol=tcp
+push.locInterval=60
+push.topic.sub.message=device/{type}/{ctn}
+push.topic.sub.notice=device/{type}
+push.topic.pub.status=client/status/{ctn}
+push.topic.pub.report=service/report
+
+## S:Map Infra
+map.infra.connection.timeout =5000
+map.infra.timeout=5000
+map.infra.encrypt.key = cd0c3839865d4e2693be817785553677
+map.infra.mrVersion = 17.01a
+#dev
+#map.infra.url =http://106.103.233.79:19000/mapinfra/api/
+
+#gumsu
+map.infra.url = http://106.103.230.135:19000/mapinfra/api
+am.map.infra.url = http://106.103.230.135:19000/mapinfra/api
+am.map.infra.svc.id = 53eb96763e09485aa74bdbc085b56682
+am.mapapi.auth.key = a44ac08ea9c74f1199b8cf347bfc3f45
+am.routh.auth.key = 897bb6a76f624beda823ab9d43227bbb
+am.poi.auth.key = cd0c3839865d4e2693be817785553677
+am.location.auth.key= 5f16724248114086978fc870ba880aac
+
+bm.map.infra.url = http://106.103.230.135:19000/mapinfra/api
+bm.map.infra.svc.id = dd31a6d9c8bb45b7bf06ff506f5a7eaf
+bm.mapapi.auth.key = 5c305dc6e2f34b4eb8f0ee43c9465615
+bm.routh.auth.key = 181cc6f6377445a7a501c4b33b9e18dd
+bm.poi.auth.key = e43d5a116e6e451ab103f1db97917c94
+bm.location.auth.key= 5734e34e6d7e49a58f41f03bd55dc694
+
+#Time Machine
+timeMachine.am.map.infra.url = https://s.openapi.ssmapinfra.uplus.co.kr:18000/mapinfra/api
+timeMachine.am.map.infra.svc.id = 9e42c11158834673b8fb382299e9ffba
+timeMachine.am.mapapi.auth.key = a8ec126cf83b4c37a330ea0cbee6f2ea
+timeMachine.am.routh.auth.key = c497690feb7e481dbc1b0510fdfda081
+timeMachine.am.poi.auth.key = 10609e95fd6a4778840ba213a01d8d57
+timeMachine.am.location.auth.key= 9e8ce7ce2a844ce997d41e13a50293a5 
+
+# E:Map Infra
+max.user.cnt=5
+mgrapp.deviceInfo.encrypt=true
+
+#Mqtt Msg
+mqtt.infortain.login.content.title=\ub85c\uadf8\uc778
+mqtt.infortain.logout.content.title=\ub85c\uadf8\uc544\uc6c3
+mqtt.infortain.login.content.msg=\uc5d0 \ub85c\uadf8\uc778 \ub418\uc5c8\uc2b5\ub2c8\ub2e4.
+mqtt.infortain.logout.content.msg=\uc5d0 \ub85c\uadf8\uc544\uc6c3 \ub418\uc5c8\uc2b5\ub2c8\ub2e4.
+
+mqtt.superUser.sendId=push_send
+mqtt.superUser.sendPw=send_push2018@#
+mqtt.superUser.reportId=push_report
+mqtt.superUser.reportPw=report_push2018@#
+mqtt.superUser.statusId=push_status
+mqtt.superUser.statusPw=status_push2018@#
+
+#Google Calendar 
+gcalendar.login.callbackurl=http://ccssapi.feelingk.com:8080/mgrapi/gcalendar/login/callback
+gcalendar.proxy.http.proxyHost=112.172.129.242
+gcalendar.proxy.http.proxyPort=8080
+
+## Event Card Area
+upload.eventCardImg.path=/ccss_svc/event_card/
+upload.noticeCardImg.path=/ccss_svc/card_notice/
+
+#push Msg
+push.arrivalNotiTitle=\uc6b0\ub9ac\uc9d1 \ub3c4\ucc29 \uc54c\ub9bc
+push.arrivalNotiContent=\ub3c4\ucc29 \uc54c\ub9bc \uc124\uc815\uc774 \ubcc0\uacbd\ub418\uc5c8\uc2b5\ub2c8\ub2e4.\n\ubcc0\uacbd\ub41c \uc815\ubcf4\ub97c \ud655\uc778\ud558\uc138\uc694.

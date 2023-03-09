@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="GiftPayment">
+
+	<resultMap id="PaymentVO" type="com.lgu.ccss.common.model.datagift.PaymentVO">
+		<result property="lgdOid"	column="LGD_OID" />
+		<result property="issueNo"	column="ISSUE_NO" />
+		<result property="payType"	column="PAY_TYPE" />
+		<result property="memberId"	column="MEMB_ID" />
+		<result property="cstPlatform"	column="CST_PLATFORM" />
+		<result property="lgdMid"	column="LGD_MID" />
+		<result property="lgdAmount"	column="LGD_AMOUNT" />
+		<result property="lgdBuyer"	column="LGD_BUYER" />
+		<result property="lgdPrdtInfo"	column="LGD_PRDT_INFO" />
+		<result property="lgdTimestamp"	column="LGD_TIMESTAMP" />
+		<result property="lgdReturnurl"	column="LGD_RETURNURL" />
+		<result property="buyerAddress"	column="LGD_BUYERADDRESS" />
+		<result property="buyerPhone"	column="LGD_BUYERPHONE" />
+		<result property="buyerMail"	column="LGD_BUYERMAIL" />
+		<result property="lgdCustomFirstpay"	column="LGD_CUSTOM_FIRSTPAY" />
+		<result property="lgdCustomProcessType"	column="LGD_CUSTOM_PROCESSTYPE" />
+		<result property="lgdLanguage"	column="LGD_LANGUAGE" />
+		<result property="lgdKvpmIspAutoAppYn"	column="LGD_KVPMISPAUTOAPPYN" />
+		<result property="lgdKvpmIspWapUrl"	column="LGD_KVPMISPWAPURL" />
+		<result property="lgdKvpmIspCancelUrl"	column="LGD_KVPMISPCANCELURL" />
+		<result property="lgdMpiLotteAppCardWapUrl"	column="LGD_MPILOTTEAPPCARDWAPURL" />
+		<result property="lgdPayKey"	column="LGD_PAYKEY" />
+		<result property="lgdTxName"	column="LGD_TXNAME" />
+		<result property="lgdTid"	column="LGD_TID" />
+		<result property="lgdPayType"	column="LGD_PAYTYPE" />
+		<result property="lgdPayDate"	column="LGD_PAYDATE" />
+		<result property="lgdFinanceCode"	column="LGD_FINANCECODE" />
+		<result property="lgdFinanceName"	column="LGD_FINANCENAME" />
+		<result property="lgdCardNum"	column="LGD_CARDNUM" />
+		<result property="lgdCardInstallMonth"	column="LGD_CARDINSTALLMONTH" />
+		<result property="lgdCardNoIntYn"	column="LGD_CARDNOINTYN" />
+		<result property="lgdFinanceAuthNum"	column="LGD_FINANCEAUTHNUM" />
+		<result property="lgdRespCode"	column="LGD_RESPCODE" />
+		<result property="lgdRespMsg"	column="LGD_RESPMSG" />
+		<result property="useYn"	column="USE_YN" />
+		<result property="regDt"	column="REG_DT" />
+		<result property="regId"	column="REG_ID" />
+		<result property="updDt"	column="UPD_DT" />
+		<result property="updId"	column="UPD_ID" />
+	</resultMap>
+
+	<insert id="insertPayment" parameterType="com.lgu.ccss.common.model.datagift.PaymentVO">
+		INSERT INTO TB_GIFT_PAYMENT(
+			PAYMENT_SEQ,
+			LGD_OID,
+			ISSUE_NO,
+			PAY_TYPE,
+			MEMB_ID,
+			CST_PLATFORM,
+			LGD_MID,
+			LGD_AMOUNT,
+			LGD_BUYER,
+			LGD_PRDT_INFO,
+			LGD_TIMESTAMP,
+			LGD_RETURNURL,
+			LGD_BUYERADDRESS,
+			LGD_BUYERPHONE,
+			LGD_BUYERMAIL,
+			LGD_CUSTOM_FIRSTPAY,
+			LGD_CUSTOM_PROCESSTYPE,
+			LGD_LANGUAGE,
+			LGD_KVPMISPAUTOAPPYN,
+			LGD_KVPMISPWAPURL,
+			LGD_KVPMISPCANCELURL,
+			LGD_MPILOTTEAPPCARDWAPURL,
+			LGD_PAYKEY,
+			LGD_TXNAME,
+			LGD_TID,
+			LGD_PAYTYPE,
+			LGD_PAYDATE,
+			LGD_FINANCECODE,
+			LGD_FINANCENAME,
+			LGD_CARDNUM,
+			LGD_CARDINSTALLMONTH,
+			LGD_CARDNOINTYN,
+			LGD_FINANCEAUTHNUM,
+			LGD_RESPCODE,
+			LGD_RESPMSG,
+			USE_YN,
+			REG_DT,
+			REG_ID,
+			UPD_DT,
+			UPD_ID
+		) VALUES (
+			TB_GIFT_PAYMENT_SEQ.nextval,
+			#{lgdOid, jdbcType=VARCHAR},
+			#{issueNo, jdbcType=VARCHAR},
+			#{payType, jdbcType=VARCHAR},
+			#{memberId, jdbcType=VARCHAR},
+			#{cstPlatform, jdbcType=VARCHAR},
+			#{lgdMid, jdbcType=VARCHAR},
+			#{lgdAmount, jdbcType=VARCHAR},
+			#{lgdBuyer, jdbcType=VARCHAR},
+			#{lgdPrdtInfo, jdbcType=VARCHAR},
+			#{lgdTimestamp, jdbcType=VARCHAR},
+			#{lgdReturnurl, jdbcType=VARCHAR},
+			#{buyerAddress, jdbcType=VARCHAR},
+			#{buyerPhone, jdbcType=VARCHAR},
+			#{buyerMail, jdbcType=VARCHAR},
+			#{lgdCustomFirstpay, jdbcType=VARCHAR},
+			#{lgdCustomProcessType, jdbcType=VARCHAR},
+			#{lgdLanguage, jdbcType=VARCHAR},
+			#{lgdKvpmIspAutoAppYn, jdbcType=VARCHAR},
+			#{lgdKvpmIspWapUrl, jdbcType=VARCHAR},
+			#{lgdKvpmIspCancelUrl, jdbcType=VARCHAR},
+			#{lgdMpiLotteAppCardWapUrl, jdbcType=VARCHAR},
+			#{lgdPayKey, jdbcType=VARCHAR},
+			#{lgdTxName, jdbcType=VARCHAR},
+			#{lgdTid, jdbcType=VARCHAR},
+			#{lgdPayType, jdbcType=VARCHAR},
+			#{lgdPayDate, jdbcType=VARCHAR},
+			#{lgdFinanceCode, jdbcType=VARCHAR},
+			#{lgdFinanceName, jdbcType=VARCHAR},
+			#{lgdCardNum, jdbcType=VARCHAR},
+			#{lgdCardInstallMonth, jdbcType=VARCHAR},
+			#{lgdCardNoIntYn, jdbcType=VARCHAR},
+			#{lgdFinanceAuthNum, jdbcType=VARCHAR},
+			#{lgdRespCode, jdbcType=VARCHAR},
+			#{lgdRespMsg, jdbcType=VARCHAR},
+			#{useYn, jdbcType=VARCHAR},
+			SYSDATE,
+			#{regId, jdbcType=VARCHAR},
+			SYSDATE,
+			#{updId, jdbcType=VARCHAR}
+		)
+	</insert>	
+
+
+</mapper>

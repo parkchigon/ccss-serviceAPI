@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- CONSOLE APPENDER  -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+	       <param name="Target" value="System.out"/>
+	       <layout  class="org.apache.log4j.PatternLayout">
+			     <param name="ConversionPattern"  value="[%d{yyyy-MM-dd HH:mm:ss, SSS}] %-5p [%C{1}.%M():%L]%m%n"/>
+		   </layout>
+	</appender>
+	
+	<!-- Xpay Client  -->
+	<appender name="xapy" class="org.apache.log4j.RollingFileAppender">
+	       <param name="File" value="/logs/ccsp/was/tomcat/xpaylog/dataGiftService_xpay.log"/>
+		   <param name="MaxFileSize" value="10MB"/>
+		   <param name="MaxBackupIndex" value="10"/>
+	       <layout  class="org.apache.log4j.PatternLayout">
+			     <param name="ConversionPattern"  value="[%d{yyyy-MM-dd HH:mm:ss, SSS}] %-5p [%C{1}.%M():%L]%m%n"/>
+		   </layout>
+	</appender>
+	
+	<!-- Xpay Client LOGGER -->
+	<logger name="com.lgu.ccss.datagift.service" additivity="false">
+	        <level value="debug"/>
+	        <appender-ref ref="xapy"/>
+	</logger>
+
+	<root>
+	  <level value="info" />
+	  <appender-ref ref="xapy" />
+	</root>
+  
+</log4j:configuration>

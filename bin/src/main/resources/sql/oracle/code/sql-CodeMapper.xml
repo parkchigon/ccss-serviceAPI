@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Code">
+	
+	
+	<resultMap id="CodeVO" type="com.lgu.ccss.common.model.code.CodeVO">
+		<result property="grpCdId" 			column="GRP_CD_ID" />
+		<result property="useYn"            column="USE_YN" />
+		<result property="grpCdNm"          column="GRP_CD_NM" />
+		<result property="grpCdExplain"     column="GRP_CD_EXPLAIN" />
+		<result property="dtlCdId"          column="DTL_CD_ID" />
+		<result property="codeDesc"         column="CODE_DESC" />
+		<result property="sortSeq"          column="SORT_SEQ" />
+		<result property="dtlCdNm"          column="DTL_CD_NM" />
+		<result property="codeDesc"          column="CODE_DESC" />
+		<result property="cdVal"            column="CD_VAL" />
+		<result property="regId"            column="REG_ID" />
+		<result property="regDt"            column="REG_DT" />
+		<result property="updId"            column="UPD_ID" />
+		<result property="updDt"            column="UPD_DT" />
+	</resultMap>
+	
+	
+	<sql id="dynamicWhereTbGroupCd">
+		<if test="!@org.springframework.util.StringUtils@isEmpty(grpCdNm)">
+			AND GRP_CD_NM = #{grpCdNm}	
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhereTbDtlCd">
+		<if test="!@org.springframework.util.StringUtils@isEmpty(dtlCdNm)">
+			AND DTL_CD_NM = #{dtlCdNm}	
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(grpCdId)">
+			AND GRP_CD_ID = #{grpCdId}	
+		</if>
+		<!-- <if test="!@org.springframework.util.StringUtils@isEmpty(cdVal)">
+			AND CD_VAL = #{cdVal}	
+		</if> -->
+		<if test="!@org.springframework.util.StringUtils@isEmpty(dtlCdId)">
+			AND DTL_CD_ID = #{dtlCdId}	
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(codeDesc)">
+			AND CODE_DESC = #{codeDesc}	
+		</if>
+	</sql>
+	
+	
+	
+	<select id="selectGroupCodeList" parameterType="com.lgu.ccss.common.model.code.CodeVO" resultMap="CodeVO">
+		SELECT 
+				GRP_CD_ID,
+				GRP_CD_NM,
+				GRP_CD_EXPLAIN,
+				USE_YN,
+				REG_ID,
+				TO_CHAR(REG_DT, 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+				UPD_ID,
+				TO_CHAR(UPD_DT, 'YYYY-MM-DD HH24:MI:SS') AS UPD_DT
+		FROM TB_GROUP_CD
+		WHERE 1=1
+		<include refid="dynamicWhereTbGroupCd"/> 
+		 ORDER BY GRP_CD_NM
+	</select>
+	
+	<select id="selectGroupCodeDetail" parameterType="com.lgu.ccss.common.model.code.CodeVO" resultMap="CodeVO">
+		SELECT 
+				GRP_CD_ID,
+				GRP_CD_NM,
+				GRP_CD_EXPLAIN,
+				USE_YN,
+				REG_ID,
+				TO_CHAR(REG_DT, 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
+		FROM TB_GROUP_CD
+		WHERE 1=1
+		AND GRP_CD_ID =#{grpCdId}
+	</select>
+	
+	<select id="selectGrpCdId" parameterType="String" resultType="String">
+		SELECT 
+				GRP_CD_ID
+		  FROM TB_GROUP_CD
+		 WHERE GRP_CD_NM= #{grpCdNm}
+	</select>
+	
+
+	<select id="selectDtlCodeList"   parameterType="com.lgu.ccss.common.model.code.CodeVO" resultMap="CodeVO">
+			SELECT 
+					GRP_CD_ID,
+					DTL_CD_ID,
+					DTL_CD_NM,
+					CODE_DESC,
+					CD_VAL,
+					SORT_SEQ,
+					USE_YN,
+					REG_ID,
+					TO_CHAR(REG_DT, 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+					UPD_ID,
+					TO_CHAR(UPD_DT, 'YYYY-MM-DD HH24:MI:SS') AS UPD_DT
+			FROM TB_DTL_CD
+			WHERE 1=1
+		<include refid="dynamicWhereTbDtlCd"/>
+	</select>
+	
+	<select id="selectDtlCodeListPaging"   parameterType="com.lgu.ccss.common.model.code.CodeVO" resultMap="CodeVO">
+			SELECT 
+					GRP_CD_ID,
+					DTL_CD_ID,
+					DTL_CD_NM,
+					CODE_DESC,
+					CD_VAL,
+					SORT_SEQ,
+					USE_YN,
+					REG_ID,
+					TO_CHAR(REG_DT, 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+					UPD_ID,
+					TO_CHAR(UPD_DT, 'YYYY-MM-DD HH24:MI:SS') AS UPD_DT
+			FROM TB_DTL_CD
+			WHERE 1=1
+		<include refid="dynamicWhereTbDtlCd"/>
+	</select>
+	
+	
+	
+	<select id="selectDtlCodeDetail" parameterType="com.lgu.ccss.common.model.code.CodeVO" resultMap="CodeVO">
+		SELECT 
+					GRP_CD_ID,
+					DTL_CD_ID,
+					DTL_CD_NM,
+					CODE_DESC,
+					CD_VAL,
+					SORT_SEQ,
+					USE_YN,
+					REG_ID,
+					TO_CHAR(REG_DT, 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+					UPD_ID,
+					TO_CHAR(UPD_DT, 'YYYY-MM-DD HH24:MI:SS') AS UPD_DT
+			FROM TB_DTL_CD
+			WHERE 1=1
+		<include refid="dynamicWhereTbDtlCd"/>
+	</select>
+	
+	<select id="selectDtlCodeListByGrpCodeNm" parameterType="com.lgu.ccss.common.model.code.CodeVO" resultMap="CodeVO">
+		SELECT 
+					GRP_CD_ID,
+					DTL_CD_ID,
+					DTL_CD_NM,
+					CODE_DESC,
+					CD_VAL,
+					SORT_SEQ,
+					USE_YN,
+					REG_ID,
+					TO_CHAR(REG_DT, 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+					UPD_ID,
+					TO_CHAR(UPD_DT, 'YYYY-MM-DD HH24:MI:SS') AS UPD_DT
+			FROM TB_DTL_CD
+			WHERE 1=1
+			AND GRP_CD_ID = (SELECT GRP_CD_ID FROM TB_GROUP_CD where GRP_CD_NM =#{grpCdNm})
+	</select>
+	
+	
+</mapper>

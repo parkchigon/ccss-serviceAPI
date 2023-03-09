@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="Parking">
+
+	<resultMap id="deviceParkLoctVO" type="com.lgu.ccss.common.model.DeviceParkLoctVO">
+		
+		<result property="deviceParkLoctSeq"		column="DEVICE_PARK_LOCT_SEQ" />
+		<result property="connDeviceId"				column="CONN_DEVICE_ID" />
+		<result property="membId"					column="MEMB_ID" />	
+		<result property="address" 					column="ADDRESS" />
+		<result property="lonx"						column="LONX" />
+		<result property="laty"						column="LATY" />
+		<result property="regDt"					column="REG_DT" />
+		<result property="updDt"					column="UPD_DT" />
+		
+
+	</resultMap>
+
+		
+	<select id="selectLatestParkLocation" resultMap="deviceParkLoctVO" parameterType="com.lgu.ccss.common.model.DeviceParkLoctVO">
+		SELECT ROWNUM_TABLE.* FROM(
+			SELECT 
+				DEVICE_PARK_LOCT_SEQ,
+				MEMB_ID,
+				CONN_DEVICE_ID,
+				ADDRESS,
+				LONX,
+				LATY,
+				TO_CHAR(REG_DT,'yyyy-mm-dd hh24:mi:ss') as REG_DT,
+				TO_CHAR(UPD_DT,'yyyy-mm-dd hh24:mi:ss') as UPD_DT
+			FROM 
+				TB_DEVICE_PARK_LOCT
+			WHERE MEMB_ID = #{membId}
+			ORDER BY DEVICE_PARK_LOCT_SEQ DESC
+		) ROWNUM_TABLE
+		WHERE ROWNUM <![CDATA[ = ]]> 1
+	</select>
+	
+	<update id="insertParkingLocation" parameterType="com.lgu.ccss.common.model.DeviceParkLoctVO">
+		MERGE INTO TB_DEVICE_PARK_LOCT
+			USING DUAL ON(MEMB_ID = #{membId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					ADDRESS = #{address},
+					LONX = #{lonx},
+					LATY = #{laty},
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT (
+					DEVICE_PARK_LOCT_SEQ,
+					CONN_DEVICE_ID,
+					MEMB_ID,
+					ADDRESS,
+					LONX,
+					LATY,
+					REG_DT,
+					UPD_DT
+				)
+				VALUES (
+					SEQ_DEVICE_PARK_LOCT_01.NEXTVAL,
+					#{connDeviceId},
+					#{membId},
+					#{address},
+					#{lonx},
+					#{laty},
+					SYSDATE,
+					SYSDATE
+				) 
+	</update>
+</mapper>

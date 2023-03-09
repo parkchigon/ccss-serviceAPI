@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="OneIdAuthInfo">
+
+	<resultMap id="oneIdAuthInfoVO" type="com.lgu.ccss.common.model.OneIdAuthInfoVO">
+		<result property="membId" 			column="MEMB_ID" />
+		<result property="oneId"			column="ONEID" />
+		<result property="ssoKey"			column="SSO_KEY" />
+		<result property="loginStatus"		column="LOGIN_STATUS" />
+		<result property="oneIdMembNo"		column="ONEID_MEMB_NO" />
+		<result property="regId"			column="REG_ID" />
+		<result property="regDt"			column="REG_DT" />
+		<result property="updId"			column="UPD_ID" />
+		<result property="updDt"			column="UPD_DT" />
+		<result property="iotSessionKey"	column="IOT_SESSION_KEY" />
+		<result property="homeCode"			column="HOME_CODE" />
+		<result property="ctn"				column="CTN" />
+		<result property="nid"				column="N_ID" />
+	</resultMap>
+	
+	
+	<select id="selectCekOneIdAuthInfo" resultMap="oneIdAuthInfoVO" parameterType="com.lgu.ccss.common.model.OneIdAuthInfoVO">
+		SELECT 
+			MEMB_ID,
+			ONEID,
+			SSO_KEY,
+			LOGIN_STATUS,
+			ONEID_MEMB_NO,
+			IOT_SESSION_KEY,
+			HOME_CODE,
+			CTN,
+			N_ID,
+			REG_ID,
+			TO_CHAR(REG_DT,'YYYY-MM-DD HH24:MI:SS') as REG_DT,
+			UPD_ID,
+			TO_CHAR(UPD_DT,'YYYY-MM-DD HH24:MI:SS') as UPD_DT
+		FROM 
+			TB_ONEID_AUTHINFO
+		WHERE
+			MEMB_ID = #{membId}
+	</select>
+	
+	
+	<update id="insertCekOneIdAuthInfo" parameterType="com.lgu.ccss.common.model.OneIdAuthInfoVO">
+		MERGE INTO TB_ONEID_AUTHINFO
+			USING DUAL ON(MEMB_ID = #{membId})
+			WHEN MATCHED THEN
+				UPDATE SET
+					ONEID = #{oneId},
+					SSO_KEY = #{ssoKey},
+					LOGIN_STATUS =  #{loginStatus},
+					ONEID_MEMB_NO = #{oneIdMembNo},
+					IOT_SESSION_KEY =#{iotSessionKey},
+					HOME_CODE =#{homeCode,jdbcType=VARCHAR},
+					CTN =#{ctn,jdbcType=VARCHAR},
+					N_ID = #{nid,jdbcType=VARCHAR},
+					UPD_ID = #{updId},
+					UPD_DT = SYSDATE
+			WHEN NOT MATCHED THEN
+				INSERT (
+					MEMB_ID,
+					ONEID,
+					SSO_KEY,
+					LOGIN_STATUS,
+					ONEID_MEMB_NO,
+					IOT_SESSION_KEY,
+					HOME_CODE,
+					CTN,
+					N_ID,
+					REG_ID,
+					REG_DT,
+					UPD_ID,
+					UPD_DT
+				)
+				VALUES (
+					#{membId},
+					#{oneId},
+					#{ssoKey},
+					#{loginStatus},
+					#{oneIdMembNo},
+					#{iotSessionKey},
+					#{homeCode,jdbcType=VARCHAR},
+					#{ctn,jdbcType=VARCHAR},
+					#{nid,jdbcType=VARCHAR},
+					#{regId},
+					SYSDATE,
+					#{updId},
+					SYSDATE
+				) 
+	</update>
+	
+	<update id="updateCekOneIdAuthInfo" parameterType="com.lgu.ccss.common.model.OneIdAuthInfoVO">
+		UPDATE TB_ONEID_AUTHINFO SET
+			LOGIN_STATUS =  #{loginStatus},
+			UPD_ID = #{updId},
+			UPD_DT = SYSDATE
+		WHERE MEMB_ID = #{membId}
+	</update>
+	
+	  
+</mapper>

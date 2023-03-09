@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="Carddeck">
+
+	<resultMap id="cardVO" type="com.lgu.ccss.common.model.CardVO">
+			<result property="cardId"			column="CARD_ID" />
+			<result property="cardNm"			column="CARD_NM" />
+			<result property="cardSortNum"		column="CARD_SORT_NUM" />
+			<result property="exposureYn"		column="EXPOSURE_YN" />
+			<result property="fixYn"			column="FIX_YN" />
+			<result property="serviceCategory"	column="SERVICE_CATEGORY" />
+			<result property="regId"			column="REG_ID" />
+			<result property="regDt"			column="REG_DT" />
+			<result property="updId"			column="UPD_ID" />
+			<result property="updDt"			column="UPD_DT" />
+			<result property="appId"			column="CARD_APP_ID" />
+	</resultMap>
+		
+	<resultMap id="eventCardVO" type="com.lgu.ccss.common.model.EventCardVO">
+			<result property="cardImgFileName"	column="CARD_IMG_FILE_NAME" />
+			<result property="eventCardId"		column="EVENT_CARD_ID" />
+			<result property="eventCardUrl"		column="EVENT_CARD_URL" />
+			<result property="exposureStartDt"	column="EXPOSURE_START_DT" />
+			<result property="exposureEndDt"	column="EXPOSURE_END_DT" />
+			<result property="serviceCategory"	column="SERVICE_CATEGORY" />
+			<result property="regId"			column="REG_ID" />
+			<result property="regDt"			column="REG_DT" />
+			<result property="updId"			column="UPD_ID" />
+			<result property="updDt"			column="UPD_DT" />
+			<result property="cardType"			column="EVENT_CARD_TYPE" />
+	</resultMap>
+
+	<select id="selectCarddeckList" resultMap="cardVO" parameterType="com.lgu.ccss.common.model.CardVO">
+		SELECT
+			CARD_ID,
+			CARD_NM,
+			CARD_SORT_NUM,
+			EXPOSURE_YN,
+			FIX_YN,
+			SERVICE_CATEGORY,
+			REG_ID,
+			TO_CHAR(REG_DT,'YYYY-MM-DD HH24:MI') as REG_DT,
+			UPD_ID,
+			TO_CHAR(UPD_DT,'YYYY-MM-DD HH24:MI') as UPD_DT,
+			CARD_APP_ID
+		FROM
+			TB_CARD
+		WHERE
+			EXPOSURE_YN = 'Y'
+		AND
+			SERVICE_CATEGORY = #{serviceCategory}
+	</select>
+	
+	<select id="selectCarddeckEvent" resultMap="eventCardVO" parameterType="com.lgu.ccss.common.model.EventCardVO">
+		SELECT
+			tec.CARD_IMG_FILE_NAME,
+			tec.EVENT_CARD_ID,
+			tec.EVENT_CARD_URL,
+			TO_CHAR(tec.EXPOSURE_START_DT,'YYYY-MM-DD HH24:MI:SS') as EXPOSURE_START_DT,
+			TO_CHAR(tec.EXPOSURE_END_DT,'YYYY-MM-DD HH24:MI:SS') as EXPOSURE_END_DT,
+			tec.SERVICE_CATEGORY,
+			tec.REG_ID,
+			TO_CHAR(tec.REG_DT,'YYYY-MM-DD HH24:MI') as REG_DT,
+			tec.UPD_ID,
+			TO_CHAR(tec.UPD_DT,'YYYY-MM-DD HH24:MI') as UPD_DT,
+			tc.CARD_APP_ID as APP_ID,
+			tec.EVENT_CARD_TYPE
+		FROM
+			TB_EVENT_CARD tec
+ 	    LEFT OUTER JOIN
+	        TB_CARD tc
+	       ON tec.CARD_ID = tc.CARD_ID
+		WHERE
+			tec.SERVICE_CATEGORY = #{serviceCategory}
+		AND 
+			tec.EXPOSURE_START_DT  <![CDATA[<=]]> SYSDATE
+		AND 
+			tec.EXPOSURE_END_DT  <![CDATA[>=]]>  SYSDATE
+	</select> 
+	
+</mapper>

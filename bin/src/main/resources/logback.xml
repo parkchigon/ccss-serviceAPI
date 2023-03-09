@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	<property name="LOGS_ABSOLUTE_PATH" value="/logs/ccsp/service_api" />
+	<property name="LOGS_TRACE_PATH" value="/logs/ccsp/trace" />
+	<property name="LOGS_API_TLO_PATH" value="/logs/ccsp/api_tlo" />
+	<property name="HANG_LOG_DIR" value="/logs/ccsp/service_api/hang" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] [%t] [%logger{0}.%method] %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="serviceApiRolling"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5p] [%t] [%logger{0}.%method] %line - %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_ABSOLUTE_PATH}/service_api.${WAS_ID}.%d{yyyyMMdd-HH}.log</fileNamePattern>
+			<maxHistory>504</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="traceRolling" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<key>fileName</key>
+			<defaultValue>unknown</defaultValue>
+		</discriminator>
+		<sift>
+			<appender name="FILE-${ctn}" class="ch.qos.logback.core.FileAppender">
+				<file>${LOGS_TRACE_PATH}/trace_${fileName}.log</file>
+				<prudent>true</prudent>
+				<layout class="ch.qos.logback.classic.PatternLayout">
+					<pattern>%m%n</pattern>
+				</layout>
+			</appender>
+		</sift>
+	</appender>
+	
+	<appender name="tloRolling"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_API_TLO_PATH}/%d{yyyyMMdd,aux}/API_TLO.${WAS_ID}.%d{yyyyMMddHHmm}.log</fileNamePattern>
+			<maxHistory>480</maxHistory>
+		</rollingPolicy>
+		<encoder>
+		    <pattern>%msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="hangRolling" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <prudent>true</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${HANG_LOG_DIR}/service_api.${WAS_ID}.%d{yyyyMMdd}.log</fileNamePattern>
+            <maxHistory>170</maxHistory>
+        </rollingPolicy>  
+        <encoder>
+            <Pattern>%d{yyyy:MM:dd HH:mm:ss} %msg%n</Pattern>
+        </encoder>
+    </appender>
+	
+	<Logger name="org.springframework" level="info" additivity="false">
+		<Appender-Ref ref="serviceApiRolling" />
+		<Appender-Ref ref="STDOUT" />
+	</Logger>
+
+	<!-- TraceLog -->
+	<Logger name="devonframe.log.trace.aspect" level="trace" additivity="false">
+		<Appender-Ref ref="serviceApiRolling" />
+		<Appender-Ref ref="STDOUT" />
+	</Logger>
+
+	<Logger name="com.lgu" level="debug" additivity="false">
+		<Appender-Ref ref="serviceApiRolling" />
+		<Appender-Ref ref="STDOUT" />
+	</Logger>
+	
+	<Logger name="com.google" level="debug" additivity="false">
+		<Appender-Ref ref="serviceApiRolling" />
+		<Appender-Ref ref="STDOUT" />
+	</Logger>
+
+	<Logger name="tracelogger" level="trace" additivity="false">
+		<Appender-Ref ref="serviceApiRolling" />
+		<Appender-Ref ref="traceRolling" />
+		<Appender-Ref ref="STDOUT" />
+	</Logger>
+	
+	<Logger name="apiTlologger" level="trace" additivity="false">
+		<Appender-Ref ref="tloRolling" />
+	</Logger>
+
+	<Logger name="HANGLogger" level="trace" additivity="false">
+		<Appender-Ref ref="hangRolling" />
+	</Logger>
+
+	<Root level="error">
+		<Appender-Ref ref="serviceApiRolling" />
+		<Appender-Ref ref="STDOUT" />
+	</Root>
+
+</configuration>
